@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import Layout from "../../sharedComponents/layout/layout";
 import { Coffee, MoreVertical, Plus, RefreshCw, Search } from "lucide-react";
+import Card from "../../sharedComponents/layout/card";
 
 const CategoryComponent: React.FC = () => {
   const [categories, setCategories] = useState([]);
@@ -9,7 +10,7 @@ const CategoryComponent: React.FC = () => {
     alert("Add category clicked");
   };
   return (
-    <Layout viewName="Category">
+    <Layout viewName="Category" addClass="font-inter">
       <div className="bg-[var(--background-color-backgroundWhite)] flex space-x-2 mb-4 justify-between items-center p-4 rounded-lg">
         <div className="relative flex-grow">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -40,11 +41,13 @@ const CategoryComponent: React.FC = () => {
       </div>
 
       <div className="flex gap-4">
-        <div className="bg-[var(--background-color-backgroundWhite)] w-1/3 border-r border-gray-200">
-          <div className="flex justify-between items-center mb-4 p-4">
+        <Card addClass="w-1/3">
+          <div className="flex justify-between items-start mb-4">
             <div>
-              <h2 className="text-lg font-semibold text-gray-800">Category</h2>
-              <p className="text-sm text-gray-500">
+              <h2 className="text-textHeading text-[14px] leading-[150%] font-medium tracking-normal pb-4">
+                Category
+              </h2>
+              <p className="text-[12px text-cardTitle">
                 Organise and manage products or services for better
                 discoverability and navigation.
               </p>
@@ -80,10 +83,10 @@ const CategoryComponent: React.FC = () => {
                   </svg>
                 </div>
               </div>
-              <h3 className="text-lg font-medium text-gray-700 mb-2">
+              <h3 className="text-[14px] text-lg font-medium text-gray-700 mb-2 text-headding-color">
                 No Categories Yet
               </h3>
-              <p className="text-gray-500 text-center mb-4">
+              <p className="text-gray-500 text-center mb-4 text-cardTitle">
                 Add your first category to organize your menu!
               </p>
               <button
@@ -96,33 +99,30 @@ const CategoryComponent: React.FC = () => {
           ) : (
             <div>{/* Category list would go here */}</div>
           )}
-        </div>
+        </Card>
+        <Card addClass="w-2/3">
+          <img
+            src="addNewCategory.png"
+            alt="Add New Category"
+            className="mb-4 m-auto"
+          />
 
-        <div className="bg-[var(--background-color-backgroundWhite)] w-2/3">
-          <div className=" rounded-lg p-4">
-            <img
-              src="addNewCategory.png"
-              alt="Add New Category"
-              className="mb-4"
-            />
+          <h3 className="text-[14px] text-lg font-medium text-gray-700 mb-2 text-headding-color text-center">
+            Learn More About How Our Menu Works
+          </h3>
+          <p className="text-gray-500 text-center mb-4 text-cardTitle">
+            Our menu structure is designed to give you complete flexibility and
+            customization. Organize your menu in a way that suits your business
+            and simplifies the browsing experience for your customers. Here's
+            how it works.
+          </p>
 
-            <h3 className="text-lg font-medium text-gray-700 mb-2 text-center">
-              Learn More About How Our Menu Works
-            </h3>
-            <p className="text-gray-600 text-center text-sm mb-4">
-              Our menu structure is designed to give you complete flexibility
-              and customization. Organize your menu in a way that suits your
-              business and simplifies the browsing experience for your
-              customers. Here's how it works.
-            </p>
-
-            <div className="flex justify-center">
-              <button className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
-                Learn More
-              </button>
-            </div>
+          <div className="flex justify-center">
+            <button className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
+              Learn More
+            </button>
           </div>
-        </div>
+        </Card>
       </div>
     </Layout>
   );

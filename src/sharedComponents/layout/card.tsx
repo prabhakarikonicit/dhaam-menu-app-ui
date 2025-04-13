@@ -1,0 +1,16 @@
+import React, { useState } from "react";
+
+interface CardProps {
+  children: React.ReactNode;
+  addClass?: string;
+}
+const Card: React.FC<CardProps> = ({ children, addClass }) => {
+  return (
+    <div
+      className={`rounded-[12px] p-4 gap-2 font-inter bg-backgroundWhite ${addClass}`}
+    >
+      {children}
+    </div>
+  );
+};
+export default Card;

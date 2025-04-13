@@ -3,14 +3,17 @@ import React, { useState } from "react";
 interface LayoutCProps {
   children: React.ReactNode;
   viewName?: string;
+  addClass?: string;
 }
-const Layout: React.FC<LayoutCProps> = ({ children, viewName }) => {
+const Layout: React.FC<LayoutCProps> = ({ children, viewName, addClass }) => {
   const [selectedVenue, setSelectedVenue] = useState("Queenstown Public House");
 
   return (
-    <div className="p-4 max-w-7xl mx-auto">
+    <div className={`p-4 max-w-7xl mx-auto font-inter ${addClass}`}>
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold text-gray-800">{viewName}</h1>
+        <h5 className="font-inter font-semibold text-[20px] leading-[150%] tracking-normal text-cardValue">
+          {viewName}
+        </h5>
 
         <div className="relative">
           <select

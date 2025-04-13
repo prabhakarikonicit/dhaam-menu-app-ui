@@ -96,5 +96,13 @@ export default {
       },
     },
   },
+  safelist: [
+    "rounded-[12px]",
+    "w-[400px]",
+    "h-[805px]",
+    "text-[20px]",
+    "leading-[150%]",
+    // Add any other custom classes you use dynamically
+  ],
   plugins: [],
 };
