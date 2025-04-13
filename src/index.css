@@ -37,7 +37,7 @@
     rgba(205, 150, 200, 0.9),
     rgba(194, 186, 194, 0.1)
   );
-  --background-image-main-bg: url('./lib/Images/signup.jpg');
+  /* --background-image-main-bg: url('./lib/Images/signup.jpg'); */
 
   --color-headding-color: #636363;
   --color-menuSubHeadingColor: #4f4f4f;
