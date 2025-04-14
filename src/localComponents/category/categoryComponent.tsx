@@ -103,21 +103,22 @@ const CategoryComponent: React.FC = () => {
             <div className="flex flex-col items-center">
               <AddCatagoryImg />
             </div>
+            <div className="my-4">
+              <h3 className="text-[14px] text-lg font-medium text-gray-700 mb-2 text-headding-color text-center">
+                Learn More About How Our Menu Works
+              </h3>
+              <p className=" text-center mb-4 text-cardTitle">
+                Our menu structure is designed to give you complete flexibility
+                and customization. Organize your menu in a way that suits your
+                business and simplifies the browsing experience for your
+                customers. Here's how it works.
+              </p>
 
-            <h3 className="text-[14px] text-lg font-medium text-gray-700 mb-2 text-headding-color text-center">
-              Learn More About How Our Menu Works
-            </h3>
-            <p className=" text-center mb-4 text-cardTitle">
-              Our menu structure is designed to give you complete flexibility
-              and customization. Organize your menu in a way that suits your
-              business and simplifies the browsing experience for your
-              customers. Here's how it works.
-            </p>
-
-            <div className="flex justify-center">
-              <button className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
-                Learn More
-              </button>
+              <div className="flex justify-center">
+                <button className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
+                  Learn More
+                </button>
+              </div>
             </div>
           </div>
         </Card>
