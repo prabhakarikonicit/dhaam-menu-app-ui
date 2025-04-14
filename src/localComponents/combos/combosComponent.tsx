@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import Layout from "../../sharedComponents/layout/layout";
+import Layout from "../../sharedComponents/layout";
 
 const CombosComponent: React.FC = () => {
   return (
