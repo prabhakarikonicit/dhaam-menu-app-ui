@@ -26,8 +26,8 @@ const AddonsComponent: React.FC = () => {
       </SearchWithButtons>
       {addOns.length === 0 ? (
         <div className="flex flex-col items-center  mt-[72px]">
-          <div className="bg-gray-100 rounded-full p-8 mb-4 ">
-            <div className="w-16 h-16 text-gray-400 flex items-center justify-center">
+          <div className="bg-gray-100 rounded-full mb-4 ">
+            <div className="text-gray-400 flex items-center justify-center">
               <EmptyCartonImg />
             </div>
           </div>
