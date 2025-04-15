@@ -11,6 +11,7 @@ import {
   AddCatagoryImg,
 } from "../../assets/images/svgAssets";
 import SearchInput from "../../sharedComponents/SearchInput";
+import SearchWithButtons from "../../sharedComponents/searchWithButtons";
 
 const CategoryComponent: React.FC = () => {
   const [categories, setCategories] = useState([]);
@@ -20,25 +21,27 @@ const CategoryComponent: React.FC = () => {
   };
   return (
     <Layout viewName="Category" addClass="font-inter">
-      <div className="bg-[var(--background-color-backgroundWhite)] flex space-x-2 mb-4 justify-between items-center p-4 rounded-lg">
-        <SearchInput />
-        <div className="flex items-center space-x-2">
-          <button className="flex items-center px-3 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 gap-2">
-            <ReorderIcon />
-            <span>Reorder</span>
-          </button>
+      <SearchWithButtons
+        onSearch={(query) => {
+          console.log(query);
+          // Handle search query
+        }}
+      >
+        <button className="flex items-center px-3 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 gap-2">
+          <ReorderIcon />
+          <span> Reorder </span>
+        </button>
 
-          <button className="flex items-center px-3 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 gap-2">
-            <ExportIcon />
-            <span>Export</span>
-          </button>
+        <button className="flex items-center px-3 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 gap-2">
+          <ExportIcon />
+          <span> Export </span>
+        </button>
 
-          <button className="flex items-center px-3 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 gap-2">
-            <ImportIcon />
-            <span>Import</span>
-          </button>
-        </div>
-      </div>
+        <button className="flex items-center px-3 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 gap-2">
+          <ImportIcon />
+          <span> Import </span>
+        </button>
+      </SearchWithButtons>
 
       <div className="flex gap-4">
         <Card addClass="w-1/3">

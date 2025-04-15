@@ -1,9 +1,6 @@
 import React, { useState } from "react";
+import { CardProps } from "../types";
 
-interface CardProps {
-  children: React.ReactNode;
-  addClass?: string;
-}
 const Card: React.FC<CardProps> = ({ children, addClass }) => {
   return (
     <div

@@ -1,11 +1,7 @@
 import React, { useState } from "react";
+import { LayoutProps } from "../types/index";
 
-interface LayoutCProps {
-  children: React.ReactNode;
-  viewName?: string;
-  addClass?: string;
-}
-const Layout: React.FC<LayoutCProps> = ({ children, viewName, addClass }) => {
+const Layout: React.FC<LayoutProps> = ({ children, viewName, addClass }) => {
   const [selectedVenue, setSelectedVenue] = useState("Queenstown Public House");
 
   return (
