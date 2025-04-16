@@ -3,6 +3,9 @@ export default {
   content: ["./src/**/*.{js,ts,jsx,tsx,html}"],
   theme: {
     extend: {
+      width: {
+        "half-screen": "calc(100vw / 2)",
+      },
       fontFamily: {
         inter: ["var(--font-inter)", "sans-serif"],
         krona: ["var(--font-krona)", "sans-serif"],

@@ -5,7 +5,7 @@ const Layout: React.FC<LayoutProps> = ({ children, viewName, addClass }) => {
   const [selectedVenue, setSelectedVenue] = useState("Queenstown Public House");
 
   return (
-    <div className={`p-4 max-w-7xl mx-auto font-inter ${addClass}`}>
+    <div className={`p-4 mx-auto font-inter ${addClass}`}>
       <div className="flex justify-between items-center mb-4">
         <h5 className="font-inter font-semibold text-[20px] leading-[150%] tracking-normal text-cardValue">
           {viewName}
