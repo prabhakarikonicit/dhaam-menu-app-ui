@@ -20,12 +20,12 @@ const ProductComponent: React.FC = () => {
           // Handle search query
         }}
       >
-        <button className="flex items-center px-3 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 gap-2">
+        <button className="flex items-center px-3 py-2 border border-transparent hover:border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 gap-2">
           <ExportIcon />
           <span> Export </span>
         </button>
 
-        <button className="flex items-center px-3 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 gap-2">
+        <button className="flex items-center px-3 py-2 border border-transparent hover:border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 gap-2">
           <ImportIcon />
           <span> Import </span>
         </button>
