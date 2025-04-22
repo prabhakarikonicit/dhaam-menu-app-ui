@@ -14,18 +14,18 @@ import {
 } from "../assets/images/svgAssets";
 
 interface SubSubCategory {
-  subSubCategoryName: string;
+  name: string;
   description: string;
 }
 
 interface SubCategory {
-  subCategoryName: string;
+  name: string;
   description: string;
   subSubCategories: SubSubCategory[];
 }
 
 interface Category {
-  categoryName: string;
+  name: string;
   description: string;
   subCategories: SubCategory[];
 }
@@ -45,10 +45,10 @@ export default function AddCategoryView({ categoryObj }: any) {
   return (
     <div className="max-w-lg mx-auto p-4 rounded-[12px] border border-[#DBDBDB] bg-[#F7F7F7]">
       {categoryObj?.map((category: Category) => {
-        const categoryKey = `category-${category.categoryName}`;
+        const categoryKey = `category-${category.name}`;
 
         return (
-          <div key={category.categoryName} className="mb-2">
+          <div key={category.name} className="mb-2">
             {/* Category */}
             <div className="flex items-center p-3 rounded-lg">
               <button
@@ -72,7 +72,7 @@ export default function AddCategoryView({ categoryObj }: any) {
 
               <div className="flex-grow w-0">
                 <h2 className="truncate text-[#1D3796] font-inter text-[13px] font-medium leading-[150%]">
-                  {category.categoryName}
+                  {category.name}
                 </h2>
                 <p className="truncate text-[#949494] font-inter text-[12px] font-normal leading-[130%]">
                   {category.description}
@@ -88,10 +88,10 @@ export default function AddCategoryView({ categoryObj }: any) {
             {expandedItems[categoryKey] && (
               <div className="pl-10 border-l-2 border-gray-200 ml-6">
                 {category.subCategories?.map((subCategory: SubCategory) => {
-                  const subKey = `subcategory-${subCategory.subCategoryName}`;
+                  const subKey = `subcategory-${subCategory.name}`;
 
                   return (
-                    <div key={subCategory.subCategoryName} className="mb-2">
+                    <div key={subCategory.name} className="mb-2">
                       <div className="flex items-center p-3 rounded-lg">
                         <button
                           className={`mr-3 rounded-full ${
@@ -112,7 +112,7 @@ export default function AddCategoryView({ categoryObj }: any) {
                         </div>
                         <div className="flex-grow w-0">
                           <h2 className="truncate text-[#1D3796] font-inter text-[13px] font-medium leading-[150%]">
-                            {subCategory.subCategoryName}
+                            {subCategory.name}
                           </h2>
                           <p className="truncate text-[#949494] font-inter text-[12px] font-normal leading-[130%]">
                             {subCategory.description}
@@ -129,7 +129,7 @@ export default function AddCategoryView({ categoryObj }: any) {
                           {subCategory.subSubCategories?.map(
                             (item: SubSubCategory) => (
                               <div
-                                key={item.subSubCategoryName}
+                                key={item.name}
                                 className="flex items-center p-3 rounded-lg"
                               >
                                 <div className="rounded-lg mr-3">
@@ -137,7 +137,7 @@ export default function AddCategoryView({ categoryObj }: any) {
                                 </div>
                                 <div className="flex-grow w-0">
                                   <h2 className="truncate text-[#1D3796] font-inter text-[13px] font-medium leading-[150%]">
-                                    {item.subSubCategoryName}
+                                    {item.name}
                                   </h2>
                                   <p className="truncate text-[#949494] font-inter text-[12px] font-normal leading-[130%]">
                                     {item.description}

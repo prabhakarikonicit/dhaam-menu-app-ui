@@ -34,21 +34,21 @@ const CategoryComponent: React.FC = () => {
   const [categories, setCategories] = useState([
     new MakeCategoryObj("1")
       .setCategory({
-        categoryName: "Beverages",
+        name: "Beverages",
         description: "Refreshing drinks to energize your day.",
         product: "Coffee",
         image: null,
         isExpanded: false,
       })
       .setSubCategory({
-        subCategoryName: "Hot Beverages",
+        name: "Hot Beverages",
         description: "Warm drinks to soothe your soul.",
         product: "Tea",
         image: null,
         isExpanded: false,
       })
       .setSubSubCategory({
-        subSubCategoryName: "Herbal Tea",
+        name: "Herbal Tea",
         description: "Natural herbal infusions.",
         product: "Chamomile",
         image: null,
@@ -216,6 +216,7 @@ const CategoryComponent: React.FC = () => {
                 const categoryObj = new MakeCategoryObj(
                   Math.random().toString(36).substring(2, 15)
                 );
+                debugger;
                 // Step 1: Validate and get Category form data
                 const categoryData = await formRef.current?.submit();
                 if (!categoryData) throw new Error("Category form invalid");

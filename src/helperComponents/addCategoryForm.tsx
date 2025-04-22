@@ -6,18 +6,10 @@ import { CategoryFormHandle } from "../types";
 import { DownloadIcon } from "../assets/images/svgAssets";
 
 type FormData = {
-  categoryName: string;
+  name: string;
   description: string;
   product: string;
   image: File;
-  subCategoryName: string;
-  subDescription: string;
-  subProduct: string;
-  subimage: File;
-  subSubCategoryName: string;
-  subSubDescription: string;
-  subSubProduct: string;
-  subSubImage: File;
 };
 
 const AddCatagoryForm = forwardRef<
@@ -87,7 +79,7 @@ const AddCatagoryForm = forwardRef<
         <input
           type="text"
           placeholder="Name"
-          {...register("categoryName", {
+          {...register("name", {
             required: "Category Name is required",
           })}
           className="border p-2 rounded w-full bg-backgroundWhite"

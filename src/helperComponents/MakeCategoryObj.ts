@@ -1,6 +1,6 @@
 // Type Definitions
 export type Category = {
-    categoryName: string;
+    name: string;
     description: string;
     product: string;
     image: File | null;
@@ -8,7 +8,7 @@ export type Category = {
 };
 
 export type SubCategory = {
-    subCategoryName: string;
+    name: string;
     description: string;
     product: string;
     image: File | null;
@@ -17,7 +17,7 @@ export type SubCategory = {
 };
 
 export type SubSubCategory = {
-    subSubCategoryName: string;
+    name: string;
     description: string;
     product: string;
     image: File | null;
@@ -26,7 +26,7 @@ export type SubSubCategory = {
 
 // Default Values
 export const defaultCategory: Category = {
-    categoryName: "",
+    name: "",
     description: "",
     product: "",
     image: null,
@@ -34,7 +34,7 @@ export const defaultCategory: Category = {
 };
 
 export const defaultSubCategory: SubCategory = {
-    subCategoryName: "",
+    name: "",
     description: "",
     product: "",
     image: null,
@@ -43,7 +43,7 @@ export const defaultSubCategory: SubCategory = {
 };
 
 export const defaultSubSubCategory: SubSubCategory = {
-    subSubCategoryName: "",
+    name: "",
     description: "",
     product: "",
     image: null,
