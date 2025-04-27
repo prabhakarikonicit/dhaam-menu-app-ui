@@ -19,9 +19,17 @@ import {
   ModalHeader,
 } from "../../sharedComponents/Modal/index";
 import AddCatagoryForm from "../../helperComponents/addCategoryForm";
-import { CategoryFormHandle } from "../../types";
+import {
+  CategoryFormHandle,
+  Category,
+  SubCategory,
+  SubSubCategory,
+} from "../../types";
 import MakeCategoryObj from "../../helperComponents/MakeCategoryObj";
 import AddCategoryView from "../../helperComponents/addCategoryView";
+import AddCatagoryList from "../../helperComponents/addCatagoryList";
+import { set } from "react-hook-form";
+import { updateCategory } from "../../helperComponents/helperFunctions";
 
 const CategoryComponent: React.FC = () => {
   const formRef = useRef<CategoryFormHandle>(null);
@@ -31,8 +39,8 @@ const CategoryComponent: React.FC = () => {
   const subSubFormsMap: {
     [key: number]: React.RefObject<CategoryFormHandle>[];
   } = {}; // Map to store sub-subcategory form references
-  const [categories, setCategories] = useState([
-    new MakeCategoryObj("1")
+  const [categories, setCategories] = useState<Category[]>([
+    new MakeCategoryObj(Math.random().toString(36).substring(2, 15))
       .setCategory({
         name: "Beverages",
         description: "Refreshing drinks to energize your day.",
@@ -59,13 +67,30 @@ const CategoryComponent: React.FC = () => {
   const [showAddCategoryModal, setShowAddCategoryModal] = useState(false);
   const [addSubCategory, setAddSubCategory] = useState<boolean>(false);
   const [addSubSubCategory, setAddSubSubCategory] = useState<boolean>(false);
+  const [indievidualCategoryDetails, setIndievidualCategoryDetails] = useState({
+    heading: "",
+    parentId: "",
+  });
 
   const addCategory = () => {
     // Implementation for adding a category would go here
 
     setShowAddCategoryModal(true);
   };
+  const addSubCategoryEvent = (id: string) => {
+    debugger;
 
+    setIndievidualCategoryDetails({ heading: "Sub Category", parentId: id });
+    setIndievidualCategoryModal(true);
+  };
+  const addSubSubCategoryEvent = (id: string) => {
+    // Implementation for adding a subcategory would go here
+    debugger;
+    setIndievidualCategoryDetails({ heading: "Sub-subcategory", parentId: id });
+    setIndievidualCategoryModal(true);
+  };
+  const [indievidualCategoryModal, setIndievidualCategoryModal] =
+    useState(false);
   return (
     <>
       <Layout viewName="Category" addClass="font-inter">
@@ -138,7 +163,11 @@ const CategoryComponent: React.FC = () => {
               </div>
             ) : (
               <div>
-                <AddCategoryView categoryObj={categories} />
+                <AddCategoryView
+                  categoryObj={categories}
+                  onAddSubCategoryClick={addSubCategoryEvent}
+                  onAddSubSubCategoryClick={addSubSubCategoryEvent}
+                />
               </div>
             )}
           </Card>
@@ -216,7 +245,6 @@ const CategoryComponent: React.FC = () => {
                 const categoryObj = new MakeCategoryObj(
                   Math.random().toString(36).substring(2, 15)
                 );
-                debugger;
                 // Step 1: Validate and get Category form data
                 const categoryData = await formRef.current?.submit();
                 if (!categoryData) throw new Error("Category form invalid");
@@ -249,6 +277,70 @@ const CategoryComponent: React.FC = () => {
 
                 // Optional: Close the modal
                 setShowAddCategoryModal(false);
+              } catch (error) {
+                console.error("❌ Error in form submission:", error);
+              }
+            }}
+          />
+        </Modal>
+      )}
+      {indievidualCategoryModal && (
+        <Modal>
+          <ModalHeader closeEvent={() => setIndievidualCategoryModal(false)}>
+            {indievidualCategoryDetails.heading}
+          </ModalHeader>
+          <ModalBody addClass="m-initial p-initial self-stretch rounded border border-none bg-white ">
+            <AddCatagoryList
+              ref={formRef}
+              heading={indievidualCategoryDetails.heading}
+              parentId={indievidualCategoryDetails.parentId}
+              onSubmit={(data) => {
+                console.log("Category Data:", data);
+                if (indievidualCategoryDetails.heading == "Sub Category") {
+                } else if (
+                  indievidualCategoryDetails.heading == "Sub Sub Category"
+                ) {
+                }
+              }}
+            />
+          </ModalBody>
+          <ModalFooter
+            primaryBtnLable="Save"
+            onPrimaryBtnClick={async () => {
+              try {
+                const categoryData = await formRef.current?.submit();
+                if (!categoryData) throw new Error("Category form invalid");
+                console.log("✅ Category Data:", categoryData);
+                console.log("categoryData", categories);
+                debugger;
+                // Here you can handle the data as needed
+                if (indievidualCategoryDetails.heading == "Sub Category") {
+                  setCategories(
+                    updateCategory(
+                      indievidualCategoryDetails.parentId,
+                      "add",
+                      categories,
+                      {
+                        subCategory: categoryData,
+                      }
+                    )
+                  );
+                } else if (
+                  indievidualCategoryDetails.heading == "Sub Sub Category"
+                ) {
+                  setCategories(
+                    updateCategory(
+                      indievidualCategoryDetails.parentId,
+                      "add",
+                      categories,
+                      {
+                        subSubCategory: categoryData,
+                      }
+                    )
+                  );
+                }
+                console.log("✅ All Form Data:");
+                setIndievidualCategoryModal(false);
               } catch (error) {
                 console.error("❌ Error in form submission:", error);
               }

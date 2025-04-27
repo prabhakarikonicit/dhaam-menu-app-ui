@@ -1,28 +1,4 @@
-// Type Definitions
-export type Category = {
-    name: string;
-    description: string;
-    product: string;
-    image: File | null;
-    isExpanded: boolean;
-};
-
-export type SubCategory = {
-    name: string;
-    description: string;
-    product: string;
-    image: File | null;
-    isExpanded: boolean;
-    subSubCategories?: SubSubCategory[];
-};
-
-export type SubSubCategory = {
-    name: string;
-    description: string;
-    product: string;
-    image: File | null;
-    isExpanded: boolean;
-};
+import { Category, SubCategory, SubSubCategory } from "../types";
 
 // Default Values
 export const defaultCategory: Category = {
@@ -34,6 +10,7 @@ export const defaultCategory: Category = {
 };
 
 export const defaultSubCategory: SubCategory = {
+    id: "",
     name: "",
     description: "",
     product: "",
@@ -43,6 +20,7 @@ export const defaultSubCategory: SubCategory = {
 };
 
 export const defaultSubSubCategory: SubSubCategory = {
+    id: "",
     name: "",
     description: "",
     product: "",
@@ -71,6 +49,7 @@ class MakeCategoryObj {
             ...defaultSubCategory,
             ...subCategory,
             subSubCategories: [],
+            id: this.id + "-sub" + subCategory.name + Math.random(),
         };
         return this;
     }
@@ -79,6 +58,7 @@ class MakeCategoryObj {
         const completeSubSubCategory = {
             ...defaultSubSubCategory,
             ...subSubCategory,
+            id: this.id + "-subSub" + subSubCategory.name + Math.random(),
         };
         this.subSubCategoryDataList.push(completeSubSubCategory);
         return this;
@@ -86,12 +66,13 @@ class MakeCategoryObj {
 
     build() {
         this.subCategoryData.subSubCategories = this.subSubCategoryDataList;
-
-        return {
+        let buildObj = {
             id: this.id,
             ...this.categoryData,
-            subCategories: [this.subCategoryData],
-        };
+            subCategories: this.subCategoryData.name.length > 0 ? [this.subCategoryData] : []
+        }
+
+        return buildObj;
     }
 
     getSubCategoryData() {

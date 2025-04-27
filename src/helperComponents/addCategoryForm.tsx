@@ -1,7 +1,9 @@
-import React, { forwardRef, useState, useImperativeHandle } from "react";
-import { set, useForm } from "react-hook-form";
-import Select from "react-select";
-import { useDropzone } from "react-dropzone";
+import React, {
+  forwardRef,
+  useState,
+  useImperativeHandle,
+  ChangeEvent,
+} from "react";
 import { CategoryFormHandle } from "../types";
 import { DownloadIcon } from "../assets/images/svgAssets";
 
@@ -9,10 +11,10 @@ type FormData = {
   name: string;
   description: string;
   product: string;
-  image: File;
+  image: File | null;
 };
 
-const AddCatagoryForm = forwardRef<
+const AddCategoryForm = forwardRef<
   CategoryFormHandle,
   {
     heading: string;
@@ -20,56 +22,63 @@ const AddCatagoryForm = forwardRef<
     onSubmit: (data: FormData) => void;
   }
 >(({ heading, onHierarchyCheckBoxChange, onSubmit }, ref) => {
-  const {
-    register,
-    getValues,
-    setValue,
-    handleSubmit,
-    trigger,
-    formState: { errors },
-  } = useForm<FormData>();
-  const [selectedProduct, setSelectedProduct] = useState<string>("");
-  // const [addSubCategory, setAddSubCategory] = useState<boolean>(false);
-  // const [addSubSubCategory, setAddSubSubCategory] = useState<boolean>(false);
+  const [formData, setFormData] = useState<FormData>({
+    name: "",
+    description: "",
+    product: "",
+    image: null,
+  });
+  const [errors, setErrors] = useState<{ name?: string }>({});
   const [files, setFiles] = useState<File[]>([]);
   const [checked, setChecked] = useState<boolean>(false);
+
   const options = [
     { value: "product1", label: "Product 1" },
     { value: "product2", label: "Product 2" },
     { value: "product3", label: "Product 3" },
   ];
 
-  const { getRootProps, getInputProps } = useDropzone({
-    accept: { "image/*": [] },
-    onDrop: (acceptedFiles: File[]) => {
-      setFiles(acceptedFiles);
-      setValue("image", acceptedFiles[0]);
-
-      const currentFormData = getValues();
-      currentFormData.image = acceptedFiles[0];
-      console.log("Auto-handling after drop:", currentFormData);
-    },
-  });
-  const submitEvent = () => {
-    const formData = getValues();
-    formData.product = selectedProduct;
-    console.log("Custom Event Triggered Data:", formData);
-    onSubmit(formData);
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
+
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const fileList = e.target.files;
+    if (fileList && fileList.length > 0) {
+      const file = fileList[0];
+      setFiles([file]);
+      setFormData((prev) => ({ ...prev, image: file }));
+    }
+  };
+
+  const handleProductSelect = (e: ChangeEvent<HTMLSelectElement>) => {
+    setFormData((prev) => ({ ...prev, product: e.target.value }));
+  };
+
+  const validate = (): boolean => {
+    const newErrors: { name?: string } = {};
+    if (!formData.name.trim()) {
+      newErrors.name = "Category Name is required";
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   useImperativeHandle(ref, () => ({
     submit: async () => {
-      const isValid = await trigger(); // Triggers validation
+      const isValid = validate();
       if (!isValid) {
         console.warn(`${heading} form is invalid`, errors);
         return Promise.reject(`${heading} form is invalid`);
       }
-
-      const values = getValues();
-      values.product = selectedProduct;
-      onSubmit?.(values);
-      return values;
+      onSubmit?.(formData);
+      return formData;
     },
   }));
+
   return (
     <div className="flex flex-col p-4 gap-4 w-full">
       <div>
@@ -78,46 +87,58 @@ const AddCatagoryForm = forwardRef<
         </label>
         <input
           type="text"
+          name="name"
           placeholder="Name"
-          {...register("name", {
-            required: "Category Name is required",
-          })}
+          value={formData.name}
+          onChange={handleInputChange}
           className="border p-2 rounded w-full bg-backgroundWhite"
         />
-        {errors.categoryName && (
-          <p className="text-red-500 text-sm">{errors.categoryName.message}</p>
-        )}
+        {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
       </div>
+
       <div>
         <label className="block mb-2 text-[12px] font-medium leading-[130%] font-inter text-paragraphBlack">
           Description
         </label>
         <input
+          type="text"
+          name="description"
           placeholder="Write here"
-          {...register("description")}
+          value={formData.description}
+          onChange={handleInputChange}
           className="border p-2 rounded w-full bg-backgroundWhite"
         />
       </div>
+
       <div>
         <label className="block mb-2 text-[12px] font-medium leading-[130%] font-inter text-paragraphBlack">
           Assign Product
         </label>
-        <Select
-          options={options}
-          onChange={(selected) => setSelectedProduct(selected?.value || "")}
-          placeholder="Select Product"
-        />
+        <select
+          value={formData.product}
+          onChange={handleProductSelect}
+          className="border p-2 rounded w-full bg-backgroundWhite"
+        >
+          <option value="">Select Product</option>
+          {options.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div className="flex flex-row gap-1 align-center justify-space-between items-center">
-        <div
-          {...getRootProps()}
-          className="border border-color-reloadBorder border-dashed rounded-[10px] cursor-pointer"
-        >
-          <input {...getInputProps()} />
-          <p className="flex gap-2 overflow-hidden text-ellipsis whitespace-nowrap text-reloadBorder text-[14px] leading-[21px] font-normal font-inter h-16 px-[26px] py-2 items-center  bg-backgroundWhite">
+        <div className="border border-color-reloadBorder border-dashed rounded-[10px] cursor-pointer">
+          <label className="flex gap-2 overflow-hidden text-ellipsis whitespace-nowrap text-reloadBorder text-[14px] leading-[21px] font-normal font-inter h-16 px-[26px] py-2 items-center bg-backgroundWhite">
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="hidden"
+            />
             Choose a file or drag & drop your image here <DownloadIcon />
-          </p>
+          </label>
           {files.length > 0 && (
             <p className="text-sm text-green-600">{files[0].name}</p>
           )}
@@ -131,9 +152,10 @@ const AddCatagoryForm = forwardRef<
           >
             <input
               type="checkbox"
+              checked={checked}
               onChange={(e) => {
-                onHierarchyCheckBoxChange(e.target.checked);
                 setChecked(e.target.checked);
+                onHierarchyCheckBoxChange(e.target.checked);
               }}
             />{" "}
             <span>Add Sub {heading}</span>
@@ -143,4 +165,5 @@ const AddCatagoryForm = forwardRef<
     </div>
   );
 });
-export default AddCatagoryForm;
+
+export default AddCategoryForm;

@@ -48,3 +48,39 @@ export interface FormData {
 export interface CategoryFormHandle {
   submit: () => void;
 }
+
+export interface CategoryFormItem {
+  name: string;
+  description: string;
+  product: string;
+  image: File | null;
+}
+
+// Type Definitions
+export type Category = {
+  name: string;
+  description: string;
+  product: string;
+  image: File | null;
+  isExpanded: boolean;
+  subCategory?: SubCategory[];
+};
+
+export type SubCategory = {
+  id: string;
+  name: string;
+  description: string;
+  product: string;
+  image: File | null;
+  isExpanded: boolean;
+  subSubCategories?: SubSubCategory[];
+};
+
+export type SubSubCategory = {
+  id: string;
+  name: string;
+  description: string;
+  product: string;
+  image: File | null;
+  isExpanded: boolean;
+};
