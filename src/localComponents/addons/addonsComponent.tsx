@@ -12,6 +12,7 @@ const AddonsComponent: React.FC = () => {
   return (
     <Layout viewName="Add-ons">
       <SearchWithButtons
+        searchPlaceHolder="Search Add-ons"
         onSearch={(query) => {
           console.log(query);
           // Handle search query

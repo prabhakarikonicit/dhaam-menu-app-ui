@@ -37,6 +37,7 @@ export default function AddCategoryView({
   categoryObj,
   onAddSubCategoryClick,
   onAddSubSubCategoryClick,
+  onSubSubCategorySelect,
 }: any) {
   const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>(
     {}
@@ -54,7 +55,7 @@ export default function AddCategoryView({
         const categoryKey = `category-${category.name}`;
 
         return (
-          <div className="max-w-lg mx-auto p-4 rounded-[12px] border border-[#DBDBDB] bg-[#F7F7F7] mb-2">
+          <div className="max-w-lg mx-auto p-4 rounded-[12px] border border-grey-border bg-[#F7F7F7] mb-2">
             <div key={category.name} className="mb-2">
               {/* Category */}
               <div className="flex items-center p-3 rounded-lg">
@@ -141,7 +142,8 @@ export default function AddCategoryView({
                               (item: SubSubCategory) => (
                                 <div
                                   key={item.name}
-                                  className="flex items-center p-3 rounded-lg"
+                                  className="flex items-center p-3 rounded-lg cursor-pointer"
+                                  onClick={() => onSubSubCategorySelect(item)}
                                 >
                                   <div className="rounded-lg mr-3">
                                     <CategoryIcon />
