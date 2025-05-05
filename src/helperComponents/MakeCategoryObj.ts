@@ -26,6 +26,7 @@ export const defaultSubSubCategory: SubSubCategory = {
     product: "",
     image: null,
     isExpanded: false,
+    products: []
 };
 
 // Class Builder
@@ -49,7 +50,7 @@ class MakeCategoryObj {
             ...defaultSubCategory,
             ...subCategory,
             subSubCategories: [],
-            id: this.id + "-sub" + subCategory.name + Math.random(),
+            id: this.id + "_sub_" + Math.random().toString(36).substring(2, 15),
         };
         return this;
     }
@@ -58,7 +59,7 @@ class MakeCategoryObj {
         const completeSubSubCategory = {
             ...defaultSubSubCategory,
             ...subSubCategory,
-            id: this.id + "-subSub" + subSubCategory.name + Math.random(),
+            id: this.id + "_subSub_" + Math.random().toString(36).substring(2, 15),
         };
         this.subSubCategoryDataList.push(completeSubSubCategory);
         return this;

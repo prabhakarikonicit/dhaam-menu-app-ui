@@ -9,12 +9,13 @@ import SearchInput from "./SearchInput";
 import { SearchWithButtonsProps } from "../types";
 
 const SearchWithButtons: React.FC<SearchWithButtonsProps> = ({
+  searchPlaceHolder = "Search",
   children,
   onSearch,
 }) => {
   return (
     <div className="bg-[var(--background-color-backgroundWhite)] flex space-x-2 mb-4 justify-between items-center p-4 rounded-lg">
-      <SearchInput onSearch={onSearch} />
+      <SearchInput onSearch={onSearch} placeHolder={searchPlaceHolder} />
       <div className="flex items-center space-x-2">{children}</div>
     </div>
   );

@@ -11,10 +11,12 @@ const ModalHeader: React.FC<ModalHeaderProps> = ({
     <div
       className={`rounded-t-[12px] flex items-center justify-between mb-4 p-4 bg-background-grey border-b border-b-reloadBorder ${addClass}`}
     >
-      <div className="text-[16px]">{children}</div>
-      <button onClick={closeEvent}>
-        <CloseIcon />
-      </button>
+      <div className="text-[16px] w-full">{children}</div>
+      {closeEvent && (
+        <button onClick={closeEvent}>
+          <CloseIcon />
+        </button>
+      )}
     </div>
   );
 };

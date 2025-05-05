@@ -2,7 +2,11 @@ import React, { ChangeEvent } from "react";
 import { SearchIcon } from "../assets/images/svgAssets";
 import { SearchInputProps } from "../types";
 
-const SearchInput: React.FC<SearchInputProps> = ({ onSearch }) => {
+const SearchInput: React.FC<SearchInputProps> = ({
+  placeHolder = "Search",
+  onSearch,
+  addClass,
+}) => {
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     onSearch(e.target.value);
   };
@@ -14,7 +18,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ onSearch }) => {
       </div>
       <input
         type="text"
-        placeholder="Search Category"
+        placeholder={placeHolder}
         className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         onChange={handleInputChange}
       />

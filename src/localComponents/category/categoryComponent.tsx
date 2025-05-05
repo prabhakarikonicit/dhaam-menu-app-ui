@@ -30,6 +30,7 @@ import AddCategoryView from "../../helperComponents/addCategoryView";
 import AddCatagoryList from "../../helperComponents/addCatagoryList";
 import { set } from "react-hook-form";
 import { updateCategory } from "../../helperComponents/helperFunctions";
+import ProductView from "../../helperComponents/ProductView";
 
 const CategoryComponent: React.FC = () => {
   const formRef = useRef<CategoryFormHandle>(null);
@@ -64,6 +65,8 @@ const CategoryComponent: React.FC = () => {
       })
       .build(),
   ]);
+  const [selectedSubSubCategory, setSelectedSubSubCategory] =
+    useState<SubSubCategory>();
   const [showAddCategoryModal, setShowAddCategoryModal] = useState(false);
   const [addSubCategory, setAddSubCategory] = useState<boolean>(false);
   const [addSubSubCategory, setAddSubSubCategory] = useState<boolean>(false);
@@ -71,15 +74,15 @@ const CategoryComponent: React.FC = () => {
     heading: "",
     parentId: "",
   });
-
+  const handleSubSubCategorySelect = (subSubCat: SubSubCategory) => {
+    setSelectedSubSubCategory(subSubCat);
+  };
   const addCategory = () => {
     // Implementation for adding a category would go here
 
     setShowAddCategoryModal(true);
   };
   const addSubCategoryEvent = (id: string) => {
-    debugger;
-
     setIndievidualCategoryDetails({ heading: "Sub Category", parentId: id });
     setIndievidualCategoryModal(true);
   };
@@ -95,6 +98,7 @@ const CategoryComponent: React.FC = () => {
     <>
       <Layout viewName="Category" addClass="font-inter">
         <SearchWithButtons
+          searchPlaceHolder={"Search Category"}
           onSearch={(query) => {
             console.log(query);
             // Handle search query
@@ -167,33 +171,38 @@ const CategoryComponent: React.FC = () => {
                   categoryObj={categories}
                   onAddSubCategoryClick={addSubCategoryEvent}
                   onAddSubSubCategoryClick={addSubSubCategoryEvent}
+                  onSubSubCategorySelect={handleSubSubCategorySelect}
                 />
               </div>
             )}
           </Card>
           <Card addClass="w-2/3">
-            <div className="mt-[72px]">
-              <div className="flex flex-col items-center">
-                <AddCatagoryImg />
-              </div>
-              <div className="my-4">
-                <h3 className="text-[14px] text-lg font-medium text-gray-700 mb-2 text-headding-color text-center">
-                  Learn More About How Our Menu Works
-                </h3>
-                <p className=" text-center mb-4 text-cardTitle">
-                  Our menu structure is designed to give you complete
-                  flexibility and customization. Organize your menu in a way
-                  that suits your business and simplifies the browsing
-                  experience for your customers. Here's how it works.
-                </p>
+            {selectedSubSubCategory ? (
+              <ProductView subSubCat={selectedSubSubCategory} />
+            ) : (
+              <div className="mt-[72px]">
+                <div className="flex flex-col items-center">
+                  <AddCatagoryImg />
+                </div>
+                <div className="my-4">
+                  <h3 className="text-[14px] text-lg font-medium text-gray-700 mb-2 text-headding-color text-center">
+                    Learn More About How Our Menu Works
+                  </h3>
+                  <p className=" text-center mb-4 text-cardTitle">
+                    Our menu structure is designed to give you complete
+                    flexibility and customization. Organize your menu in a way
+                    that suits your business and simplifies the browsing
+                    experience for your customers. Here's how it works.
+                  </p>
 
-                <div className="flex justify-center">
-                  <button className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
-                    Learn More
-                  </button>
+                  <div className="flex justify-center">
+                    <button className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
+                      Learn More
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </Card>
         </div>
       </Layout>
@@ -293,7 +302,11 @@ const CategoryComponent: React.FC = () => {
             <AddCatagoryList
               ref={formRef}
               heading={indievidualCategoryDetails.heading}
-              parentId={indievidualCategoryDetails.parentId}
+              parentId={`${indievidualCategoryDetails.parentId}${
+                indievidualCategoryDetails.heading == "Sub Category"
+                  ? "_sub_"
+                  : "_subSub_"
+              }`}
               onSubmit={(data) => {
                 console.log("Category Data:", data);
                 if (indievidualCategoryDetails.heading == "Sub Category") {
@@ -326,7 +339,7 @@ const CategoryComponent: React.FC = () => {
                     )
                   );
                 } else if (
-                  indievidualCategoryDetails.heading == "Sub Sub Category"
+                  indievidualCategoryDetails.heading == "Sub-subcategory"
                 ) {
                   setCategories(
                     updateCategory(

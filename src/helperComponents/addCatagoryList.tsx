@@ -20,6 +20,7 @@ const AddCategoryList = forwardRef<
     onSubmit: (data: FormItem[]) => void;
   }
 >(({ parentId, heading, onSubmit }, ref) => {
+  debugger;
   // State for managing multiple form entries
   const [formEntries, setFormEntries] = useState<FormItem[]>([
     {
