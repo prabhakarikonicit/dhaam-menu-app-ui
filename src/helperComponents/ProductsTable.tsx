@@ -1,6 +1,7 @@
 import { MoreVertical } from "lucide-react";
 import React from "react";
 import { CategoryIcon } from "../assets/images/svgAssets";
+import DataTable from "../sharedComponents/DataTable";
 
 const data = [
   {
@@ -52,69 +53,56 @@ const data = [
     image: "https://source.unsplash.com/50x50/?americano",
   },
 ];
+const columns = [
+  {
+    header: "File name",
+    accessor: "title",
+    className: "pl-[5rem]",
+    render: (row: any) => (
+      <div className="flex items-center gap-3">
+        <CategoryIcon />
+        <div className="flex flex-col">
+          <span className="font-medium truncate text-[12px] font-500 leading-tight">
+            {row.title}
+          </span>
+          <span className="text-cardTitle truncate text-[11px] font-400 leading-tight">
+            {row.description}
+          </span>
+        </div>
+      </div>
+    ),
+  },
+  {
+    header: "Date added",
+    accessor: "date",
+  },
+  {
+    header: "Price",
+    accessor: "price",
+  },
+  {
+    header: "Status",
+    accessor: "status",
+    render: () => (
+      <label className="relative inline-flex items-center cursor-pointer">
+        <input type="checkbox" className="sr-only peer" defaultChecked />
+        <div className="w-11 h-6 bg-gray-200 peer-focus:ring-2 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600" />
+      </label>
+    ),
+  },
+  {
+    header: "Action",
+    accessor: "action",
+    render: () => (
+      <button className="text-gray-500 hover:text-gray-700 float-right">
+        <MoreVertical size={20} />
+      </button>
+    ),
+  },
+];
 
 const ProductsTable = () => {
-  return (
-    <div className="overflow-x-auto bg-white rounded-lg shadow">
-      <table className="w-full text-left text-[12px] overflow-hidden truncate font-inter leading-tight">
-        <thead className="text-xs ">
-          <tr className="text-headding-color bg-background-grey">
-            <th className="p-4">
-              <input type="checkbox" className="w-4 h-4" />
-            </th>
-            <th className="p-4 pl-[5rem] font-[600]">File name</th>
-            <th className="p-4 font-[600]">Date added</th>
-            <th className="p-4 font-[600]">Price</th>
-            <th className="p-4 font-[600]">Status</th>
-            <th className="p-4 font-[600]">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((item) => (
-            <tr key={item.id} className="border-b hover:bg-background-grey">
-              <td className="p-4">
-                <input type="checkbox" className="w-4 h-4" />
-              </td>
-              <td className="flex items-center gap-3 p-4">
-                {/* <img
-                  src={item.image}
-                  alt={item.title}
-                  className="w-10 h-10 rounded object-cover"
-                /> */}
-                <CategoryIcon />
-                <div className="flex flex-col">
-                  <span className="font-medium overflow-hidden text-[cardValue] truncate text-[12px] font-500 leading-tight">
-                    {item.title}
-                  </span>
-                  <span className="text-cardTitle overflow-hidden truncate font-inter text-[11px] font-400 leading-tight">
-                    {item.description}
-                  </span>
-                </div>
-              </td>
-              <td className="p-4 font-medium">{item.date}</td>
-              <td className="p-4 font-medium">{item.price}</td>
-              <td className="p-4">
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    value=""
-                    className="sr-only peer"
-                    defaultChecked
-                  />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
-                </label>
-              </td>
-              <td className="p-4 text-right">
-                <button className="text-gray-500 hover:text-gray-700">
-                  <MoreVertical size={20} />
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
+  return <DataTable data={data} columns={columns} />;
 };
 
 export default ProductsTable;

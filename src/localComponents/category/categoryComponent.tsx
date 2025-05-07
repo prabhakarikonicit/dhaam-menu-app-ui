@@ -152,10 +152,10 @@ const CategoryComponent: React.FC = () => {
                     <NoCatagoryIcon />
                   </div>
                 </div>
-                <h3 className="text-[14px] text-lg font-medium text-gray-700 mb-2 text-headding-color">
+                <h3 className="text-[14px] text-lg font-medium mb-2 text-headding-color">
                   No Categories Yet
                 </h3>
-                <p className="text-gray-500 text-center mb-4 text-cardTitle">
+                <p className="text-center mb-4 text-cardTitle">
                   Add your first category to organize your menu!
                 </p>
                 <button

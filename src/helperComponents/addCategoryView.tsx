@@ -12,6 +12,7 @@ import {
   MinusIcon,
   PlusIcon,
 } from "../assets/images/svgAssets";
+import DropdownMenu from "../sharedComponents/dropdownMenu";
 
 interface SubSubCategory {
   id: string;
@@ -87,9 +88,14 @@ export default function AddCategoryView({
                   </p>
                 </div>
 
-                <button>
-                  <MoreVertical size={20} />
-                </button>
+                <DropdownMenu
+                  addLabel="Add subcategory"
+                  onAdd={() => console.log("Add clicked")}
+                  onEdit={() => console.log("Edit clicked")}
+                  onDuplicate={() => console.log("Duplicate clicked")}
+                  onDelete={() => console.log("Delete clicked")}
+                  onDisable={() => console.log("Disable clicked")}
+                />
               </div>
 
               {/* SubCategories */}
@@ -130,9 +136,14 @@ export default function AddCategoryView({
                               {subCategory.description}
                             </p>
                           </div>
-                          <button>
-                            <MoreVertical size={20} />
-                          </button>
+                          <DropdownMenu
+                            addLabel="Add sub-subcategory"
+                            onAdd={() => console.log("Add clicked")}
+                            onEdit={() => console.log("Edit clicked")}
+                            onDuplicate={() => console.log("Duplicate clicked")}
+                            onDelete={() => console.log("Delete clicked")}
+                            onDisable={() => console.log("Disable clicked")}
+                          />
                         </div>
 
                         {/* SubSubCategory */}
@@ -157,7 +168,20 @@ export default function AddCategoryView({
                                     </p>
                                   </div>
                                   <button>
-                                    <MoreVertical size={20} />
+                                    <DropdownMenu
+                                      addLabel="Add Products"
+                                      onAdd={() => console.log("Add clicked")}
+                                      onEdit={() => console.log("Edit clicked")}
+                                      onDuplicate={() =>
+                                        console.log("Duplicate clicked")
+                                      }
+                                      onDelete={() =>
+                                        console.log("Delete clicked")
+                                      }
+                                      onDisable={() =>
+                                        console.log("Disable clicked")
+                                      }
+                                    />
                                   </button>
                                 </div>
                               )

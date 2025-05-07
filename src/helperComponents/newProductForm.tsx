@@ -1,5 +1,5 @@
 import React, { useState, useImperativeHandle, forwardRef } from "react";
-import { Info, Upload, Trash2, GripVertical } from "lucide-react";
+import { Info, Upload, GripVertical } from "lucide-react";
 import {
   CategoryIcon,
   DeleteIcon,
@@ -15,6 +15,11 @@ import {
   UploadedImage,
   CompleteFormData,
 } from "../types";
+
+import SelectField from "../sharedComponents/selectField";
+import FileUpload from "../sharedComponents/fileUpload";
+import CheckboxWithLabel from "../sharedComponents/checkboxWithLabel";
+import InputText from "../sharedComponents/InputText";
 
 // Using forwardRef with TypeScript
 const NewProductForm = forwardRef<ProductFormRef, NewProductFormProps>(
@@ -88,6 +93,38 @@ const NewProductForm = forwardRef<ProductFormRef, NewProductFormProps>(
         };
         props.onDataChange(updatedData as CompleteFormData);
       }
+    };
+
+    // Handle checkbox change explicitly for the CheckboxWithLabel component
+    const handleCheckboxChange = (checked: boolean, name: string) => {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: checked,
+      }));
+
+      // Call the onDataChange callback if provided
+      if (props.onDataChange) {
+        const updatedData = {
+          ...formData,
+          [name]: checked,
+          optionName,
+          variants: variants.map((variant) => ({
+            name: variant,
+            ...variantPrices[variant],
+          })),
+          images: uploadedImages,
+        };
+        props.onDataChange(updatedData as CompleteFormData);
+      }
+    };
+
+    // Handle file upload
+    const handleFileUpload = (file: File) => {
+      const newImage = {
+        name: file.name,
+        size: `${(file.size / (1024 * 1024)).toFixed(1)} MB`,
+      };
+      setUploadedImages((prev) => [...prev, newImage]);
     };
 
     // Handle variant price changes
@@ -198,57 +235,70 @@ const NewProductForm = forwardRef<ProductFormRef, NewProductFormProps>(
       setVariantPrices(newVariantPrices);
     };
 
+    // Category options for SelectField
+    const categoryOptions = [
+      { value: "food", label: "Food" },
+      { value: "drinks", label: "Drinks" },
+      { value: "desserts", label: "Desserts" },
+    ];
+
+    // Add-ons options for SelectField
+    const addOnsOptions = [
+      { value: "extra1", label: "Extra 1" },
+      { value: "extra2", label: "Extra 2" },
+    ];
+
+    // Discount options for SelectField
+    const discountOptions = [
+      { value: "10percent", label: "10% Off" },
+      { value: "25percent", label: "25% Off" },
+    ];
+
+    // Frequently bought together options for SelectField
+    const frequentlyBoughtTogetherOptions = [
+      { value: "product1", label: "Product 1" },
+      { value: "product2", label: "Product 2" },
+    ];
+
     return (
       <form onSubmit={handleSubmit} className="text-bgButton">
         <div className="space-y-4">
           {/* Product Name */}
           <div className="mb-4">
-            <label className="block text-[12px] font-medium mb-1">
-              Product Name <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
+            <InputText
+              label="Product Name"
               name="productName"
               value={formData.productName}
               onChange={handleInputChange}
               placeholder="Product name"
-              className="w-full p-2 border border-gray-300 rounded-md"
-              required
+              required={true}
             />
           </div>
 
           {/* Price Row */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div>
-              <label className="block text-[12px] font-medium mb-1">
-                Price <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="text"
+              <InputText
+                label="Price"
                 name="price"
                 value={formData.price}
                 onChange={handleInputChange}
                 placeholder="Price"
-                className="w-full p-2 border border-gray-300 rounded-md"
-                required
+                required={true}
               />
             </div>
             <div>
-              <label className="block text-[12px] font-medium mb-1">
-                Compare-at price
-              </label>
               <div className="relative">
-                <input
-                  type="text"
+                <InputText
+                  label="Compare-at price"
                   name="comparePrice"
                   value={formData.comparePrice}
                   onChange={handleInputChange}
                   placeholder="Compare price"
-                  className="w-full p-2 border border-gray-300 rounded-md"
                 />
                 <button
                   type="button"
-                  className="absolute right-2 top-2 text-gray-400"
+                  className="absolute right-2 top-8 text-gray-400"
                 >
                   <Info size={18} />
                 </button>
@@ -258,17 +308,12 @@ const NewProductForm = forwardRef<ProductFormRef, NewProductFormProps>(
 
           {/* Charge Tax */}
           <div className="flex items-center mb-4">
-            <input
-              type="checkbox"
-              name="chargeTax"
+            <CheckboxWithLabel
               checked={formData.chargeTax}
-              onChange={handleInputChange}
-              className="h-4 w-4 mr-2 text-blue-600"
+              onChange={(checked) => handleCheckboxChange(checked, "chargeTax")}
+              label="Charge tax on this product"
             />
-            <label className="text-[14px] mr-4">
-              Charge tax on this product
-            </label>
-            <button type="button" className="text-[12px] underline">
+            <button type="button" className="text-[12px] underline ml-4">
               Setup Tax
             </button>
           </div>
@@ -309,66 +354,48 @@ const NewProductForm = forwardRef<ProductFormRef, NewProductFormProps>(
             </div>
           </div>
 
-          {/* Other fields continue... */}
           {/* Category and Add-Ons */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div>
-              <label className="block text-[12px] font-medium mb-1">
-                Map with Category
-              </label>
-              <select
+              <SelectField
+                label="Map with Category"
                 name="category"
                 value={formData.category}
                 onChange={handleInputChange}
-                className="w-full p-2 border border-gray-300 rounded-md appearance-none bg-white"
-              >
-                <option value="">Select category</option>
-                <option value="food">Food</option>
-                <option value="drinks">Drinks</option>
-                <option value="desserts">Desserts</option>
-              </select>
+                options={categoryOptions}
+                placeholder="Select category"
+              />
             </div>
             <div>
-              <label className="block text-[12px] font-medium mb-1">
-                Select Add-Ons
-              </label>
-              <select
+              <SelectField
+                label="Select Add-Ons"
                 name="addOns"
                 value={formData.addOns}
                 onChange={handleInputChange}
-                className="w-full p-2 border border-gray-300 rounded-md appearance-none bg-white"
-              >
-                <option value="">Select Add-Ons</option>
-                <option value="extra1">Extra 1</option>
-                <option value="extra2">Extra 2</option>
-              </select>
+                options={addOnsOptions}
+                placeholder="Select Add-Ons"
+              />
             </div>
           </div>
 
           {/* Preparation Time and SKU */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div>
-              <label className="block text-[12px] font-medium mb-1">
-                Preparation Time
-              </label>
-              <input
-                type="text"
+              <InputText
+                label="Preparation Time"
                 name="preparationTime"
                 value={formData.preparationTime}
                 onChange={handleInputChange}
                 placeholder="Enter time"
-                className="w-full p-2 border border-gray-300 rounded-md"
               />
             </div>
             <div>
-              <label className="block text-[12px] font-medium mb-1">SKU</label>
-              <input
-                type="text"
+              <InputText
+                label="SKU"
                 name="sku"
                 value={formData.sku}
                 onChange={handleInputChange}
                 placeholder="SKU"
-                className="w-full p-2 border border-gray-300 rounded-md"
               />
             </div>
           </div>
@@ -376,29 +403,23 @@ const NewProductForm = forwardRef<ProductFormRef, NewProductFormProps>(
           {/* Min and Max Quantity */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div>
-              <label className="block text-[12px] font-medium mb-1">
-                Minimum Quantity to Order
-              </label>
-              <input
-                type="number"
+              <InputText
+                label="Minimum Quantity to Order"
                 name="minQuantity"
-                value={formData.minQuantity}
+                value={formData.minQuantity.toString()}
                 onChange={handleInputChange}
                 placeholder="1"
-                className="w-full p-2 border border-gray-300 rounded-md"
+                type="number"
               />
             </div>
             <div>
-              <label className="block text-[12px] font-medium mb-1">
-                Maximum Quantity to Order
-              </label>
-              <input
-                type="number"
+              <InputText
+                label="Maximum Quantity to Order"
                 name="maxQuantity"
-                value={formData.maxQuantity}
+                value={formData.maxQuantity.toString()}
                 onChange={handleInputChange}
                 placeholder="Enter"
-                className="w-full p-2 border border-gray-300 rounded-md"
+                type="number"
               />
             </div>
           </div>
@@ -406,66 +427,42 @@ const NewProductForm = forwardRef<ProductFormRef, NewProductFormProps>(
           {/* Discount and Frequently Bought Together */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div>
-              <label className="block text-[12px] font-medium mb-1">
-                Select Discount
-              </label>
-              <select
+              <SelectField
+                label="Select Discount"
                 name="discount"
                 value={formData.discount}
                 onChange={handleInputChange}
-                className="w-full p-2 border border-gray-300 rounded-md appearance-none bg-white"
-              >
-                <option value="">Select discount</option>
-                <option value="10percent">10% Off</option>
-                <option value="25percent">25% Off</option>
-              </select>
+                options={discountOptions}
+                placeholder="Select discount"
+              />
             </div>
             <div>
-              <label className="block text-[12px] font-medium mb-1">
-                Frequently Bought Together
-                <Info size={16} className="inline-block ml-1 stroke-gray-400" />
-              </label>
-              <select
-                name="frequentlyBoughtTogether"
-                value={formData.frequentlyBoughtTogether}
-                onChange={handleInputChange}
-                className="w-full p-2 border border-gray-300 rounded-md appearance-none bg-white"
-              >
-                <option value="">Select product</option>
-                <option value="product1">Product 1</option>
-                <option value="product2">Product 2</option>
-              </select>
+              <div className="relative">
+                <SelectField
+                  label="Frequently Bought Together"
+                  name="frequentlyBoughtTogether"
+                  value={formData.frequentlyBoughtTogether}
+                  onChange={handleInputChange}
+                  options={frequentlyBoughtTogetherOptions}
+                  placeholder="Select product"
+                />
+                <button
+                  type="button"
+                  className="absolute right-8 top-0 text-gray-400"
+                >
+                  <Info size={16} />
+                </button>
+              </div>
             </div>
           </div>
 
           {/* Image Upload */}
           <div className="mb-4">
-            <div className="border-2 border-dashed border-gray-300 rounded-md p-6 text-center">
-              <label className="cursor-pointer">
-                <input
-                  type="file"
-                  multiple
-                  className="hidden"
-                  onChange={(e) => {
-                    if (e.target.files) {
-                      const newFiles = Array.from(e.target.files).map(
-                        (file) => ({
-                          name: file.name,
-                          size: `${(file.size / (1024 * 1024)).toFixed(1)} MB`,
-                        })
-                      );
-                      setUploadedImages((prev) => [...prev, ...newFiles]);
-                    }
-                  }}
-                />
-                <div className="flex flex-col items-center justify-center">
-                  <Upload className="h-6 w-6 text-gray-400 mb-2" />
-                  <p className="text-[12px] text-gray-500">
-                    Choose a file or drag & drop your image here
-                  </p>
-                </div>
-              </label>
-            </div>
+            <FileUpload
+              label="Choose a file or drag & drop your image here"
+              onChange={handleFileUpload}
+              accept="image/*"
+            />
 
             {/* Uploaded Images */}
             <div className="mt-4 flex justify-between gap-2">
@@ -526,15 +523,12 @@ const NewProductForm = forwardRef<ProductFormRef, NewProductFormProps>(
             <h3 className="font-medium mb-4">Variants</h3>
 
             <div className="mb-4">
-              <label className="block text-[12px] font-medium mb-1">
-                Option name
-              </label>
-              <input
-                type="text"
+              <InputText
+                label="Option name"
+                name="optionName"
                 value={optionName}
                 onChange={(e) => setOptionName(e.target.value)}
                 placeholder="e.g. Size"
-                className="w-full p-2 border border-gray-300 rounded-md"
               />
             </div>
 
@@ -599,17 +593,18 @@ const NewProductForm = forwardRef<ProductFormRef, NewProductFormProps>(
                   <AddImageIcon />
                 </span>
                 <span className="flex-grow mx-[10px] w-[123px]">{variant}</span>
-                <input
-                  type="text"
+                <InputText
+                  label=""
+                  name={`${variant}-price`}
                   value={variantPrices[variant]?.price || ""}
                   onChange={(e) =>
                     handleVariantPriceChange(variant, "price", e.target.value)
                   }
                   placeholder="Price"
-                  className="py-[8px] px-[12px] border border-reloadBorder rounded-md shrink"
                 />
-                <input
-                  type="text"
+                <InputText
+                  label=""
+                  name={`${variant}-comparePrice`}
                   value={variantPrices[variant]?.comparePrice || ""}
                   onChange={(e) =>
                     handleVariantPriceChange(
@@ -619,7 +614,6 @@ const NewProductForm = forwardRef<ProductFormRef, NewProductFormProps>(
                     )
                   }
                   placeholder="Compare Price"
-                  className="py-[8px] px-[12px] border border-reloadBorder rounded-md shrink"
                 />
               </div>
             ))}
