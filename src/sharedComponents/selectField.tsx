@@ -9,6 +9,7 @@ interface SelectFieldProps {
   options: { value: string; label: string }[];
   placeholder?: string;
   required?: boolean;
+  className?: string;
 }
 
 const SelectField: React.FC<SelectFieldProps> = ({
@@ -19,15 +20,18 @@ const SelectField: React.FC<SelectFieldProps> = ({
   options,
   placeholder = "Select an option",
   required = false,
+  className = "",
 }) => {
   return (
-    <div>
-      <label
-        htmlFor={name}
-        className="block mb-2 text-[12px] font-medium leading-[130%] font-inter text-paragraphBlack"
-      >
-        {label}
-      </label>
+    <div className={`flex flex-col ${className}`}>
+      {label && (
+        <label
+          htmlFor={name}
+          className="block mb-2 text-[12px] font-medium leading-[130%] font-inter text-paragraphBlack"
+        >
+          {label}
+        </label>
+      )}
       <select
         id={name}
         name={name}

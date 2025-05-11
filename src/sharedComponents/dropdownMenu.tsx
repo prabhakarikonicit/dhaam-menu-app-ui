@@ -1,14 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { MoreVertical } from "lucide-react";
-
-interface DropdownMenuProps {
-  addLabel?: string;
-  onAdd?: () => void;
-  onEdit?: () => void;
-  onDuplicate?: () => void;
-  onDelete?: () => void;
-  onDisable?: () => void;
-}
+import { DropdownMenuProps } from "../types";
 
 const DropdownMenu: React.FC<DropdownMenuProps> = ({
   addLabel = "Add sub-subcategory",

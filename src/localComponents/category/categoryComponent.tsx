@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, use } from "react";
 import Layout from "../../sharedComponents/layout";
 import { Coffee, MoreVertical, Plus, RefreshCw, Search } from "lucide-react";
 import Card from "../../sharedComponents/card";
@@ -24,6 +24,7 @@ import {
   Category,
   SubCategory,
   SubSubCategory,
+  UpdateAction,
 } from "../../types";
 import MakeCategoryObj from "../../helperComponents/MakeCategoryObj";
 import AddCategoryView from "../../helperComponents/addCategoryView";
@@ -31,15 +32,14 @@ import AddCatagoryList from "../../helperComponents/addCatagoryList";
 import { set } from "react-hook-form";
 import { updateCategory } from "../../helperComponents/helperFunctions";
 import ProductView from "../../helperComponents/ProductView";
+import AddCategoryForm from "../../helperComponents/addCategoryForm";
+import AddCategoryList from "../../helperComponents/addCatagoryList";
 
 const CategoryComponent: React.FC = () => {
   const formRef = useRef<CategoryFormHandle>(null);
-  const subFormRef = useRef<CategoryFormHandle>(null);
-  const subSubFormRef = useRef<CategoryFormHandle>(null);
-  const subForms = [subFormRef]; // Array of subcategory form references
-  const subSubFormsMap: {
-    [key: number]: React.RefObject<CategoryFormHandle>[];
-  } = {}; // Map to store sub-subcategory form references
+
+  const addProductFormRef = useRef<CategoryFormHandle>(null);
+
   const [categories, setCategories] = useState<Category[]>([
     new MakeCategoryObj(Math.random().toString(36).substring(2, 15))
       .setCategory({
@@ -68,28 +68,75 @@ const CategoryComponent: React.FC = () => {
   const [selectedSubSubCategory, setSelectedSubSubCategory] =
     useState<SubSubCategory>();
   const [showAddCategoryModal, setShowAddCategoryModal] = useState(false);
-  const [addSubCategory, setAddSubCategory] = useState<boolean>(false);
-  const [addSubSubCategory, setAddSubSubCategory] = useState<boolean>(false);
-  const [indievidualCategoryDetails, setIndievidualCategoryDetails] = useState({
+
+  const [indievidualCategoryDetails, setIndievidualCategoryDetails] = useState<{
+    heading: string;
+    parentId: string;
+    preFillData?: Category | SubCategory | SubSubCategory;
+    action: UpdateAction;
+  }>({
     heading: "",
     parentId: "",
+    action: "add",
   });
+
   const handleSubSubCategorySelect = (subSubCat: SubSubCategory) => {
     setSelectedSubSubCategory(subSubCat);
   };
-  const addCategory = () => {
+  const addCategory = (id: string) => {
     // Implementation for adding a category would go here
 
     setShowAddCategoryModal(true);
   };
-  const addSubCategoryEvent = (id: string) => {
-    setIndievidualCategoryDetails({ heading: "Sub Category", parentId: id });
+  const editCategory = (id: string, preFillData?: Category) => {
+    // Implementation for adding a category would go here
+    setIndievidualCategoryDetails({
+      heading: "Category",
+      parentId: id,
+      preFillData: preFillData,
+      action: "edit",
+    });
     setIndievidualCategoryModal(true);
   };
-  const addSubSubCategoryEvent = (id: string) => {
+  const addSubCategoryEvent = (id: string) => {
+    setIndievidualCategoryDetails({
+      heading: "Sub Category",
+      parentId: id,
+      action: "add",
+    });
+    setIndievidualCategoryModal(true);
+  };
+  const editSubCategoryEvent = (id: string, preFillData?: SubCategory) => {
+    setIndievidualCategoryDetails({
+      heading: "Sub Category",
+      parentId: id,
+      preFillData: preFillData,
+      action: "edit",
+    });
+    setIndievidualCategoryModal(true);
+  };
+  const addSubSubCategoryEvent = (id: string, preFillData?: SubSubCategory) => {
     // Implementation for adding a subcategory would go here
-    debugger;
-    setIndievidualCategoryDetails({ heading: "Sub-subcategory", parentId: id });
+
+    setIndievidualCategoryDetails({
+      heading: "Sub-subcategory",
+      parentId: id,
+      action: "add",
+    });
+    setIndievidualCategoryModal(true);
+  };
+  const editSubSubCategoryEvent = (
+    id: string,
+    preFillData?: SubSubCategory
+  ) => {
+    // Implementation for adding a subcategory would go here
+
+    setIndievidualCategoryDetails({
+      heading: "Sub-subcategory",
+      parentId: id,
+      preFillData: preFillData,
+      action: "edit",
+    });
     setIndievidualCategoryModal(true);
   };
   const [indievidualCategoryModal, setIndievidualCategoryModal] =
@@ -172,13 +219,36 @@ const CategoryComponent: React.FC = () => {
                   onAddSubCategoryClick={addSubCategoryEvent}
                   onAddSubSubCategoryClick={addSubSubCategoryEvent}
                   onSubSubCategorySelect={handleSubSubCategorySelect}
+                  handleAddProductsClick={async (
+                    subSubCategory: SubSubCategory
+                  ) => {
+                    setSelectedSubSubCategory(subSubCategory);
+                    const categoryData =
+                      await addProductFormRef.current?.submit();
+                  }}
+                  onEditButtonClick={(
+                    obj: Category | SubCategory | SubSubCategory,
+                    level: string
+                  ) => {
+                    console.log(obj, level);
+                    if (level === "category") {
+                      editCategory(obj.id, obj);
+                    } else if (level === "subCategory") {
+                      editSubCategoryEvent(obj.id, obj);
+                    } else if (level === "subSubCategory") {
+                      editSubSubCategoryEvent(obj.id, obj);
+                    }
+                  }}
                 />
               </div>
             )}
           </Card>
           <Card addClass="w-2/3">
             {selectedSubSubCategory ? (
-              <ProductView subSubCat={selectedSubSubCategory} />
+              <ProductView
+                ref={addProductFormRef}
+                subSubCat={selectedSubSubCategory}
+              />
             ) : (
               <div className="mt-[72px]">
                 <div className="flex flex-col items-center">
@@ -212,79 +282,51 @@ const CategoryComponent: React.FC = () => {
             Add New Category
           </ModalHeader>
           <ModalBody>
-            <AddCatagoryForm
+            <AddCategoryForm
               ref={formRef}
-              heading={"Category"}
-              onHierarchyCheckBoxChange={setAddSubCategory}
+              heading="Category"
+              // defaultCategoryData={existingCategoryData}
               onSubmit={(data) => {
-                console.log("Category Data:", data);
-                // setCategoryData(data);
+                console.log("Submitted Data:", data);
               }}
             />
-            {addSubCategory && (
-              <div className="ml-[73px]">
-                <AddCatagoryForm
-                  ref={subFormRef}
-                  heading={"Sub Category"}
-                  onHierarchyCheckBoxChange={setAddSubSubCategory}
-                  onSubmit={(data) => {
-                    console.log("Sub Category Data:", data);
-                    // setSubCategoryData(data);
-                  }}
-                />
-                {addSubSubCategory && (
-                  <div className="ml-[73px]">
-                    <AddCatagoryForm
-                      ref={subSubFormRef}
-                      heading={"Sub Sub Category"}
-                      onSubmit={(data) => {
-                        console.log("Sub Sub Category Data:", data);
-                        // setSubSubCategoryData(data);
-                      }}
-                    />
-                  </div>
-                )}
-              </div>
-            )}
           </ModalBody>
           <ModalFooter
             primaryBtnLable="Save"
             onPrimaryBtnClick={async () => {
               try {
+                const categoryData = await formRef.current?.submit();
+                if (!categoryData) {
+                  throw new Error("Form is invalid");
+                }
+
+                const typedCategoryData: {
+                  category: Category;
+                  subCategory?: SubCategory;
+                  subSubCategory?: SubCategory;
+                } = categoryData;
+
                 const categoryObj = new MakeCategoryObj(
                   Math.random().toString(36).substring(2, 15)
                 );
-                // Step 1: Validate and get Category form data
-                const categoryData = await formRef.current?.submit();
-                if (!categoryData) throw new Error("Category form invalid");
-                categoryObj.setCategory(categoryData);
 
-                // Step 2: If subcategory is checked, get its data
-                let subCategoryData = null;
-                if (addSubCategory) {
-                  subCategoryData = await subFormRef.current?.submit();
-                  if (!subCategoryData)
-                    throw new Error("Subcategory form invalid");
-                  categoryObj.setSubCategory(subCategoryData);
+                categoryObj.setCategory(typedCategoryData.category);
+
+                if (typedCategoryData.subCategory) {
+                  categoryObj.setSubCategory(typedCategoryData.subCategory);
                 }
 
-                // Step 3: If sub-subcategory is checked, get its data
-                let subSubCategoryData = null;
-                if (addSubSubCategory) {
-                  subSubCategoryData = await subSubFormRef.current?.submit();
-                  if (!subSubCategoryData)
-                    throw new Error("Sub-subcategory form invalid");
-                  categoryObj.setSubSubCategory(subSubCategoryData);
+                if (typedCategoryData.subSubCategory) {
+                  categoryObj.setSubSubCategory(
+                    typedCategoryData.subSubCategory
+                  );
                 }
 
-                // Step 4: Build the final category object using MakeCategoryObj
                 const finalCategoryObj = categoryObj.build();
                 setCategories((prev) => [...prev, finalCategoryObj]);
 
-                console.log("✅ All Form Data:");
-                console.log("Category:", [finalCategoryObj]);
+                console.log("✅ All Form Data:", finalCategoryObj);
 
-                // Optional: Close the modal
                 setShowAddCategoryModal(false);
               } catch (error) {
                 console.error("❌ Error in form submission:", error);
@@ -299,22 +341,23 @@ const CategoryComponent: React.FC = () => {
             {indievidualCategoryDetails.heading}
           </ModalHeader>
           <ModalBody addClass="m-initial p-initial self-stretch rounded border border-none bg-white ">
-            <AddCatagoryList
+            <AddCategoryList
               ref={formRef}
+              parentId={indievidualCategoryDetails.parentId}
               heading={indievidualCategoryDetails.heading}
-              parentId={`${indievidualCategoryDetails.parentId}${
-                indievidualCategoryDetails.heading == "Sub Category"
-                  ? "_sub_"
-                  : "_subSub_"
-              }`}
-              onSubmit={(data) => {
-                console.log("Category Data:", data);
-                if (indievidualCategoryDetails.heading == "Sub Category") {
-                } else if (
-                  indievidualCategoryDetails.heading == "Sub Sub Category"
-                ) {
-                }
-              }}
+              onSubmit={(data) => console.log("Submitted:", data)}
+              initialData={[
+                {
+                  id: indievidualCategoryDetails.preFillData?.id || "",
+                  name: indievidualCategoryDetails.preFillData?.name || "",
+                  description:
+                    indievidualCategoryDetails.preFillData?.description || "",
+                  product:
+                    indievidualCategoryDetails.preFillData?.product || "",
+                  image: indievidualCategoryDetails.preFillData?.image || null,
+                  subSubCategory: undefined,
+                },
+              ]}
             />
           </ModalBody>
           <ModalFooter
@@ -325,13 +368,24 @@ const CategoryComponent: React.FC = () => {
                 if (!categoryData) throw new Error("Category form invalid");
                 console.log("✅ Category Data:", categoryData);
                 console.log("categoryData", categories);
-                debugger;
-                // Here you can handle the data as needed
-                if (indievidualCategoryDetails.heading == "Sub Category") {
+                if (indievidualCategoryDetails.heading == "Category") {
                   setCategories(
                     updateCategory(
                       indievidualCategoryDetails.parentId,
-                      "add",
+                      indievidualCategoryDetails.action,
+                      categories,
+                      {
+                        category: categoryData,
+                      }
+                    )
+                  );
+                }
+                // Here you can handle the data as needed
+                else if (indievidualCategoryDetails.heading == "Sub Category") {
+                  setCategories(
+                    updateCategory(
+                      indievidualCategoryDetails.parentId,
+                      indievidualCategoryDetails.action,
                       categories,
                       {
                         subCategory: categoryData,
@@ -344,7 +398,7 @@ const CategoryComponent: React.FC = () => {
                   setCategories(
                     updateCategory(
                       indievidualCategoryDetails.parentId,
-                      "add",
+                      indievidualCategoryDetails.action,
                       categories,
                       {
                         subSubCategory: categoryData,

@@ -39,6 +39,8 @@ export default function AddCategoryView({
   onAddSubCategoryClick,
   onAddSubSubCategoryClick,
   onSubSubCategorySelect,
+  handleAddProductsClick,
+  onEditButtonClick,
 }: any) {
   const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>(
     {}
@@ -90,8 +92,8 @@ export default function AddCategoryView({
 
                 <DropdownMenu
                   addLabel="Add subcategory"
-                  onAdd={() => console.log("Add clicked")}
-                  onEdit={() => console.log("Edit clicked")}
+                  onAdd={() => onAddSubCategoryClick(category.id)}
+                  onEdit={() => onEditButtonClick(category, "category")}
                   onDuplicate={() => console.log("Duplicate clicked")}
                   onDelete={() => console.log("Delete clicked")}
                   onDisable={() => console.log("Disable clicked")}
@@ -138,8 +140,12 @@ export default function AddCategoryView({
                           </div>
                           <DropdownMenu
                             addLabel="Add sub-subcategory"
-                            onAdd={() => console.log("Add clicked")}
-                            onEdit={() => console.log("Edit clicked")}
+                            onAdd={() =>
+                              onAddSubSubCategoryClick(subCategory.id)
+                            }
+                            onEdit={() =>
+                              onEditButtonClick(subCategory, "subCategory")
+                            }
                             onDuplicate={() => console.log("Duplicate clicked")}
                             onDelete={() => console.log("Delete clicked")}
                             onDisable={() => console.log("Disable clicked")}
@@ -170,8 +176,13 @@ export default function AddCategoryView({
                                   <button>
                                     <DropdownMenu
                                       addLabel="Add Products"
-                                      onAdd={() => console.log("Add clicked")}
-                                      onEdit={() => console.log("Edit clicked")}
+                                      onAdd={() => handleAddProductsClick(item)}
+                                      onEdit={() =>
+                                        onEditButtonClick(
+                                          item,
+                                          "subSubCategory"
+                                        )
+                                      }
                                       onDuplicate={() =>
                                         console.log("Duplicate clicked")
                                       }

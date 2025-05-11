@@ -1,9 +1,15 @@
-import React, { useRef, useState } from "react";
+import React, {
+  forwardRef,
+  useRef,
+  useState,
+  useImperativeHandle,
+} from "react";
 import {
   SubSubCategory,
   ProductViewProps,
   ProductFormRef,
   CompleteFormData,
+  CategoryFormHandle,
 } from "../types";
 import { Search } from "lucide-react";
 import SearchInput from "../sharedComponents/SearchInput";
@@ -16,7 +22,12 @@ import {
 import { Modal, ModalBody, ModalHeader } from "../sharedComponents/Modal";
 import ProductsTable from "./ProductsTable";
 
-const ProductView: React.FC<ProductViewProps> = ({ subSubCat }) => {
+const ProductView = forwardRef<
+  CategoryFormHandle,
+  {
+    subSubCat: SubSubCategory;
+  }
+>(({ subSubCat }, ref) => {
   const [showAddProductsModal, setShowAddProductsModal] = useState(false);
   const [showNewProductsFormModal, setShowNewProductsFormModal] =
     useState(false);
@@ -46,6 +57,12 @@ const ProductView: React.FC<ProductViewProps> = ({ subSubCat }) => {
   const [submittedData, setSubmittedData] = useState<CompleteFormData | null>(
     null
   );
+
+  useImperativeHandle(ref, () => ({
+    submit: async () => {
+      setShowAddProductsModal(true);
+    },
+  }));
 
   // Function to handle external form submission
   const handleSaveProduct = () => {
@@ -91,7 +108,7 @@ const ProductView: React.FC<ProductViewProps> = ({ subSubCat }) => {
           {/* Header with search and add button */}
           <div className="flex items-center justify-between p-2 border-b border-grey-border">
             <div className="text-textHeading text-xs leading-tight font-[500]">
-              ({subSubCat.products.length}) products in{" "}
+              ({subSubCat?.products?.length ?? 0}) products in{" "}
               <span className="font-[700]">{subSubCat.name}</span>
             </div>
             <div className="flex gap-2">
@@ -108,7 +125,7 @@ const ProductView: React.FC<ProductViewProps> = ({ subSubCat }) => {
           </div>
 
           {/* Empty state content */}
-          {/* {subSubCat.products.length>0?( */}
+          {/* {subSubCat?.products?.length ?? 0 ? ( */}
           {true ? (
             <ProductsTable />
           ) : (
@@ -119,10 +136,10 @@ const ProductView: React.FC<ProductViewProps> = ({ subSubCat }) => {
                   <EmptyCartonImg />
                 </div>
               </div>
-              <h3 className="text-[14px] text-lg font-medium text-gray-700 mb-2 text-headding-color">
+              <h3 className="text-[14px] text-lg font-medium  mb-2 text-headding-color">
                 No products added yet
               </h3>
-              <p className="text-gray-500 text-center mb-4 text-cardTitle">
+              <p className=" text-center mb-4 text-cardTitle">
                 Add your first product to get started!
               </p>
               <button
@@ -258,6 +275,6 @@ const ProductView: React.FC<ProductViewProps> = ({ subSubCat }) => {
       )}
     </>
   );
-};
+});
 
 export default ProductView;

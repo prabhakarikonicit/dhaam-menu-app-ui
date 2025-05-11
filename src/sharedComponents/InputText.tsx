@@ -1,7 +1,7 @@
 import React from "react";
 
 interface InputTextProps {
-  label: string;
+  label?: string;
   name: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -10,6 +10,7 @@ interface InputTextProps {
   type?: string;
   required?: boolean;
   disabled?: boolean;
+  className?: string;
 }
 
 const InputText: React.FC<InputTextProps> = ({
@@ -22,15 +23,18 @@ const InputText: React.FC<InputTextProps> = ({
   type = "text",
   required = false,
   disabled = false,
+  className = "",
 }) => {
   return (
-    <div>
-      <label
-        htmlFor={name}
-        className="block mb-2 text-[12px] font-medium leading-[130%] font-inter text-paragraphBlack"
-      >
-        {label} {required && <span className="text-red-500">*</span>}
-      </label>
+    <div className={`${className}`}>
+      {label && (
+        <label
+          htmlFor={name}
+          className="block mb-2 text-[12px] font-medium leading-[130%] font-inter text-paragraphBlack"
+        >
+          {label} {required && <span className="text-red-500">*</span>}
+        </label>
+      )}
       <input
         id={name}
         type={type}
@@ -40,7 +44,7 @@ const InputText: React.FC<InputTextProps> = ({
         placeholder={placeholder}
         required={required}
         disabled={disabled}
-        className="border p-2 rounded w-full bg-backgroundWhite"
+        className={`border p-2 rounded w-full bg-backgroundWhite`}
       />
       {error && <p className="text-red-500 text-sm">{error}</p>}
     </div>
