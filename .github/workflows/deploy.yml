@@ -16,10 +16,10 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 23.11.0
+          node-version: 20  # ✅ Use Node 20 for compatibility with Rspack
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci  # ✅ No --no-optional, so native bindings are installed
 
       - name: Build the React app
         run: npm run build
