@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - name: Checkout code
@@ -20,9 +20,6 @@ jobs:
 
       - name: Install dependencies
         run: npm ci  # ✅ No --no-optional, so native bindings are installed
-
-      - name: Force install rspack Linux binding
-        run: npm install @rspack/binding-linux-x64-gnu --no-save || true
         
       - name: Build the React app
         run: npm run build
