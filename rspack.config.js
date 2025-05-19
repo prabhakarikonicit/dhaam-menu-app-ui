@@ -34,7 +34,7 @@ export default defineConfig({
     // You need to set a unique value that is not equal to other applications
     uniqueName: "dhaam_menu_app_ui",
     // publicPath must be configured if using manifest
-    publicPath: "http://localhost:3006/",
+    publicPath: "auto",
   },
 
   experiments: {
