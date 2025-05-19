@@ -12,6 +12,7 @@ import {
   MinusIcon,
   PlusIcon,
 } from "../assets/images/svgAssets";
+import DropdownMenu from "../sharedComponents/dropdownMenu";
 
 interface SubSubCategory {
   id: string;
@@ -38,6 +39,8 @@ export default function AddCategoryView({
   onAddSubCategoryClick,
   onAddSubSubCategoryClick,
   onSubSubCategorySelect,
+  handleAddProductsClick,
+  onEditButtonClick,
 }: any) {
   const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>(
     {}
@@ -87,9 +90,14 @@ export default function AddCategoryView({
                   </p>
                 </div>
 
-                <button>
-                  <MoreVertical size={20} />
-                </button>
+                <DropdownMenu
+                  addLabel="Add subcategory"
+                  onAdd={() => onAddSubCategoryClick(category.id)}
+                  onEdit={() => onEditButtonClick(category, "category")}
+                  onDuplicate={() => console.log("Duplicate clicked")}
+                  onDelete={() => console.log("Delete clicked")}
+                  onDisable={() => console.log("Disable clicked")}
+                />
               </div>
 
               {/* SubCategories */}
@@ -130,9 +138,18 @@ export default function AddCategoryView({
                               {subCategory.description}
                             </p>
                           </div>
-                          <button>
-                            <MoreVertical size={20} />
-                          </button>
+                          <DropdownMenu
+                            addLabel="Add sub-subcategory"
+                            onAdd={() =>
+                              onAddSubSubCategoryClick(subCategory.id)
+                            }
+                            onEdit={() =>
+                              onEditButtonClick(subCategory, "subCategory")
+                            }
+                            onDuplicate={() => console.log("Duplicate clicked")}
+                            onDelete={() => console.log("Delete clicked")}
+                            onDisable={() => console.log("Disable clicked")}
+                          />
                         </div>
 
                         {/* SubSubCategory */}
@@ -157,7 +174,25 @@ export default function AddCategoryView({
                                     </p>
                                   </div>
                                   <button>
-                                    <MoreVertical size={20} />
+                                    <DropdownMenu
+                                      addLabel="Add Products"
+                                      onAdd={() => handleAddProductsClick(item)}
+                                      onEdit={() =>
+                                        onEditButtonClick(
+                                          item,
+                                          "subSubCategory"
+                                        )
+                                      }
+                                      onDuplicate={() =>
+                                        console.log("Duplicate clicked")
+                                      }
+                                      onDelete={() =>
+                                        console.log("Delete clicked")
+                                      }
+                                      onDisable={() =>
+                                        console.log("Disable clicked")
+                                      }
+                                    />
                                   </button>
                                 </div>
                               )

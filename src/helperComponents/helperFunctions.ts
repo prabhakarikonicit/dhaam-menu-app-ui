@@ -1,13 +1,5 @@
-import { Category, SubCategory, SubSubCategory } from "../types";
+import { Category, SubCategory, SubSubCategory, AddPayload, EditPayload, UpdateAction } from "../types";
 
-type UpdateAction = "add" | "delete" | "edit";
-
-type AddPayload = {
-    subCategory?: SubCategory[];
-    subSubCategory?: SubSubCategory[];
-};
-
-type EditPayload = Partial<Omit<Category, "subCategories">> & Partial<Omit<SubCategory, "subSubCategories">> & Partial<SubSubCategory>;
 
 export function updateCategory(
     parentId: string,

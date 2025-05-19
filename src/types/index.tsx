@@ -61,6 +61,7 @@ export interface CategoryFormItem {
 
 // Type Definitions
 export type Category = {
+  id: string;
   name: string;
   description: string;
   product: string;
@@ -86,11 +87,12 @@ export type SubSubCategory = {
   product: string;
   image: File | null;
   isExpanded: boolean;
-  products: Products[];
+  products?: Products[];
 };
 
 export interface ProductViewProps {
   subSubCat: SubSubCategory;
+  onDataChange?: (data: CompleteFormData) => void;
 }
 
 export type Products = {
@@ -143,10 +145,50 @@ export interface ProductFormRef {
   submitForm: () => CompleteFormData;
   getFormData: () => CompleteFormData;
 }
-
+export interface AddonFormRef {
+  submitForm: () => CompleteFormData;
+}
 // Props for the NewProductForm component
 export interface NewProductFormProps {
   // Add any props you might need here
   initialData?: Partial<ProductFormData>;
   onDataChange?: (data: CompleteFormData) => void;
 }
+
+export interface DropdownMenuProps {
+  addLabel?: string;
+  onAdd?: () => void;
+  onEdit?: () => void;
+  onDuplicate?: () => void;
+  onDelete?: () => void;
+  onDisable?: () => void;
+}
+export type UpdateAction = "add" | "delete" | "edit";
+
+export type AddPayload = {
+  category?: Category[];
+  subCategory?: SubCategory[];
+  subSubCategory?: SubSubCategory[];
+};
+
+export type EditPayload = Partial<Omit<Category, "subCategories">> &
+  Partial<Omit<SubCategory, "subSubCategories">> &
+  Partial<SubSubCategory>;
+
+export type FormItem = {
+  id: string;
+  name: string;
+  description: string;
+  product: string;
+  image: any | File | null;
+  subSubCategory: [] | undefined;
+};
+
+export type AddOnFormHandle = {
+  submit: () => void;
+};
+export type AddOnOption = {
+  name: string;
+  price: string;
+  isDefault: boolean;
+};
