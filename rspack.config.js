@@ -9,7 +9,7 @@ import { defineConfig } from "@rspack/cli";
 import { rspack } from "@rspack/core";
 import RefreshPlugin from "@rspack/plugin-react-refresh";
 import { ModuleFederationPlugin } from "@module-federation/enhanced/rspack";
-import { mfConfig } from "./module-federation.config.ts";
+import { mfConfig } from "./module-federation.config.js";
 
 const isDev = process.env.NODE_ENV === "development";
 
