@@ -3,6 +3,7 @@ export interface SearchWithButtonsProps {
   searchPlaceHolder?: string;
   children?: ReactNode;
   onSearch: SearchInputProps["onSearch"];
+  addClass?: string;
 }
 export interface CardProps {
   children: ReactNode;
