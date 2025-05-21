@@ -9,4 +9,7 @@ export const mfConfig = {
     "./tailwindStyles": "./src/index.css"
   },
   shared: ["react", "react-dom"],
+  types: {
+    skipEmit: process.env.NODE_ENV === 'development',
+  },
 };
