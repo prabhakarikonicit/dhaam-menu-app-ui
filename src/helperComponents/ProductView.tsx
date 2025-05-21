@@ -18,9 +18,17 @@ import {
   CategoryIcon,
   DeleteIcon,
   EmptyCartonImg,
+  BackArrow,
 } from "../assets/images/svgAssets";
-import { Modal, ModalBody, ModalHeader } from "../sharedComponents/Modal";
+import {
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+} from "../sharedComponents/Modal";
 import ProductsTable from "./ProductsTable";
+import Card from "../sharedComponents/card";
+import DataTableForMobile from "./dataTableMobile";
 
 const ProductView = forwardRef<
   CategoryFormHandle,
@@ -57,6 +65,7 @@ const ProductView = forwardRef<
   const [submittedData, setSubmittedData] = useState<CompleteFormData | null>(
     null
   );
+  const [showMobileTable, setShowMobileTable] = useState<boolean>(true);
 
   useImperativeHandle(ref, () => ({
     submit: async () => {
@@ -127,7 +136,48 @@ const ProductView = forwardRef<
           {/* Empty state content */}
           {/* {subSubCat?.products?.length ?? 0 ? ( */}
           {true ? (
-            <ProductsTable />
+            <>
+              <div className="hidden sm:block">
+                <ProductsTable />
+              </div>
+              {showMobileTable && (
+                <div className="block sm:hidden w-full absolute top-[-4.5rem] right-0">
+                  <div
+                    className="bg-background-grey h-[60px] flex items-center gap-2 text-textHeading font-inter text-[12px] font-medium leading-[130%]
+"
+                  >
+                    <button
+                      onClick={() => {
+                        setShowMobileTable(false);
+                      }}
+                      className=" bg-white border border-gray-300 rounded text-textHeading hover:bg-gray-50 p-[6px]"
+                    >
+                      <BackArrow />
+                    </button>
+                    (6) products in <span className="font-[700]">Coffee</span>{" "}
+                    (Queenstown Public House)
+                  </div>
+                  <Card addClass="max-h-[calc(100vh-110px)] overflow-y-auto">
+                    <div className="flex lg:hidden items-center justify-between mt-4 gap-4 ">
+                      <SearchInput
+                        onSearch={() => {}}
+                        placeHolder={"Search products"}
+                        addClass="grow"
+                      />
+                      <button
+                        onClick={() => {
+                          setShowAddProductsModal(true);
+                        }}
+                        className="px-4 py-2 bg-bgButton border border-bgButton rounded text-whiteColor hover:bg-btnBorder"
+                      >
+                        Add
+                      </button>
+                    </div>
+                    <DataTableForMobile />
+                  </Card>
+                </div>
+              )}
+            </>
           ) : (
             <div className="flex flex-col items-center justify-center py-16">
               {/* Empty box illustration */}
@@ -154,6 +204,7 @@ const ProductView = forwardRef<
           )}
         </div>
       </div>
+
       {showAddProductsModal && (
         <Modal addClass="!absolute top-0 right-0 rounded-none h-full w-[40rem]">
           <ModalHeader addClass="w-full">
@@ -162,7 +213,7 @@ const ProductView = forwardRef<
                 Add Products in{" "}
                 <span className="underline">{subSubCat.name}</span>
               </span>
-              <div className="flex gap-2">
+              <div className="hidden sm:flex gap-2">
                 <button
                   onClick={() => {
                     setShowAddProductsModal(false);
@@ -241,6 +292,13 @@ const ProductView = forwardRef<
               </div>
             </div>
           </ModalBody>
+          <ModalFooter
+            addClass=""
+            onPrimaryBtnClick={() => {}}
+            onSecondaryBtnClick={() => setShowAddProductsModal(false)}
+            secondaryBtnLable="Discard"
+            primaryBtnLable="Save"
+          />
         </Modal>
       )}
       {showNewProductsFormModal && (
@@ -248,7 +306,7 @@ const ProductView = forwardRef<
           <ModalHeader addClass="w-full">
             <div className="flex items-center justify-between">
               <span>Add New Products</span>
-              <div className="flex gap-2">
+              <div className="hidden sm:flex gap-2">
                 <button
                   onClick={() => {
                     setShowNewProductsFormModal(false);
@@ -271,6 +329,15 @@ const ProductView = forwardRef<
               <NewProductForm ref={formRef} />
             </div>
           </ModalBody>
+          <ModalFooter
+            addClass=""
+            onPrimaryBtnClick={() => {
+              handleSaveProduct;
+            }}
+            onSecondaryBtnClick={() => setShowNewProductsFormModal(false)}
+            secondaryBtnLable="Discard"
+            primaryBtnLable="Save"
+          />
         </Modal>
       )}
     </>

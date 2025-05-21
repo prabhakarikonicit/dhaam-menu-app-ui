@@ -11,15 +11,15 @@ const ModalFooter: React.FC<ModalFooterProps> = ({
 }) => {
   return (
     <div
-      className={`absolute bottom-0 right-0 left-0 rounded-b-[12px] flex items-center justify-between mt-4 p-4 bg-background-grey border-b border-b-reloadBorder ${addClass}`}
+      className={`justify-center absolute bottom-0 right-0 left-0 rounded-b-[12px] flex items-center sm:justify-between mt-4 p-4 bg-background-grey border-b border-b-reloadBorder ${addClass}`}
     >
       <div className="text-[16px]">{children}</div>
 
-      <div className="flex items-center gap-2">
+      <div className="w-full flex items-center gap-2 sm:w-initial">
         {secondaryBtnLable && onSecondaryBtnClick && (
           <button
             onClick={onSecondaryBtnClick}
-            className="px-4 py-2 bg-bgButton border border-bgButton rounded text-whiteColor hover:bg-btnBorder"
+            className="w-full sm:w-initial px-4 py-2 bg-white border border-reloadBorder rounded text-cardValue hover:bg-btnBorder"
           >
             {secondaryBtnLable}
           </button>
@@ -27,7 +27,7 @@ const ModalFooter: React.FC<ModalFooterProps> = ({
         {primaryBtnLable && onPrimaryBtnClick && (
           <button
             onClick={onPrimaryBtnClick}
-            className="px-4 py-2 bg-bgButton border border-bgButton rounded text-whiteColor hover:bg-btnBorder"
+            className="w-full sm:w-initial px-4 py-2 bg-bgButton border border-bgButton rounded text-whiteColor hover:bg-btnBorder"
           >
             {primaryBtnLable}
           </button>

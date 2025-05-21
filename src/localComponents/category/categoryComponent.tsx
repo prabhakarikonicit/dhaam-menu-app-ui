@@ -9,6 +9,8 @@ import {
   ExportIcon,
   ImportIcon,
   AddCatagoryImg,
+  BackArrow,
+  CategoryIcon,
 } from "../../assets/images/svgAssets";
 import SearchInput from "../../sharedComponents/SearchInput";
 import SearchWithButtons from "../../sharedComponents/searchWithButtons";
@@ -34,6 +36,7 @@ import { updateCategory } from "../../helperComponents/helperFunctions";
 import ProductView from "../../helperComponents/ProductView";
 import AddCategoryForm from "../../helperComponents/addCategoryForm";
 import AddCategoryList from "../../helperComponents/addCatagoryList";
+import DataTableForMobile from "../../helperComponents/dataTableMobile";
 
 const CategoryComponent: React.FC = () => {
   const formRef = useRef<CategoryFormHandle>(null);
@@ -67,6 +70,7 @@ const CategoryComponent: React.FC = () => {
   ]);
   const [selectedSubSubCategory, setSelectedSubSubCategory] =
     useState<SubSubCategory>();
+  const [showMobileTable, setShowMobileTable] = useState(false);
   const [showAddCategoryModal, setShowAddCategoryModal] = useState(false);
 
   const [indievidualCategoryDetails, setIndievidualCategoryDetails] = useState<{
@@ -82,6 +86,7 @@ const CategoryComponent: React.FC = () => {
 
   const handleSubSubCategorySelect = (subSubCat: SubSubCategory) => {
     setSelectedSubSubCategory(subSubCat);
+    setShowMobileTable(true);
   };
   const addCategory = (id: string) => {
     // Implementation for adding a category would go here
@@ -150,6 +155,7 @@ const CategoryComponent: React.FC = () => {
             console.log(query);
             // Handle search query
           }}
+          addClass="hidden sm:flex"
         >
           <button className="flex items-center px-3 py-2 border border-transparent hover:border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 gap-2">
             <ReorderIcon />
@@ -167,27 +173,42 @@ const CategoryComponent: React.FC = () => {
           </button>
         </SearchWithButtons>
 
-        <div className="flex gap-4">
-          <Card addClass="w-1/3">
-            <div className="flex justify-between items-start mb-4 border-b border-grey-border pb-2">
-              <div>
-                <h2 className="text-textHeading text-[14px] leading-[150%] font-medium tracking-normal pb-4">
-                  Category
-                </h2>
-                <p className="text-[12px] text-cardTitle">
-                  Organise and manage products or services for better
-                  discoverability and navigation.
-                </p>
+        <div className="flex gap-4 relative">
+          <Card addClass="w-full lg:w-1/3 md:w-1/2">
+            <div className="broder-grey-border pb-2 mb-4 border-b">
+              <div className="flex justify-between items-start">
+                <div>
+                  <h2 className="text-textHeading text-[14px] leading-[150%] font-medium tracking-normal pb-4">
+                    Category
+                  </h2>
+                  <p className="text-[12px] text-cardTitle">
+                    Organise and manage products or services for better
+                    discoverability and navigation.
+                  </p>
+                </div>
+                <div className="flex space-x-2">
+                  <button
+                    onClick={addCategory}
+                    className="px-3 py-1 bg-white border border-gray-300 rounded text-gray-700 hover:bg-gray-50 hidden lg:block"
+                  >
+                    Add
+                  </button>
+                  <button className="p-1 text-gray-500 hover:bg-gray-100 rounded">
+                    <MoreVertical className="h-5 w-5" />
+                  </button>
+                </div>
               </div>
-              <div className="flex space-x-2">
+              <div className="flex lg:hidden items-center justify-between mt-4 gap-4">
+                <SearchInput
+                  onSearch={() => {}}
+                  placeHolder={"Search Category"}
+                  addClass="grow"
+                />
                 <button
                   onClick={addCategory}
                   className="px-3 py-1 bg-white border border-gray-300 rounded text-gray-700 hover:bg-gray-50"
                 >
                   Add
-                </button>
-                <button className="p-1 text-gray-500 hover:bg-gray-100 rounded">
-                  <MoreVertical className="h-5 w-5" />
                 </button>
               </div>
             </div>
@@ -243,7 +264,7 @@ const CategoryComponent: React.FC = () => {
               </div>
             )}
           </Card>
-          <Card addClass="w-2/3">
+          <Card addClass="absolute w-full sm:w-1/2 lg:w-2/3 sm:static ">
             {selectedSubSubCategory ? (
               <ProductView
                 ref={addProductFormRef}

@@ -58,7 +58,7 @@ export default function AddCategoryView({
         const categoryKey = `category-${category.name}`;
 
         return (
-          <div className="max-w-lg mx-auto p-4 rounded-[12px] border border-grey-border bg-[#F7F7F7] mb-2">
+          <div className=" mx-auto p-4 rounded-[12px] border border-grey-border bg-[#F7F7F7] mb-2">
             <div key={category.name} className="mb-2">
               {/* Category */}
               <div className="flex items-center p-3 rounded-lg">

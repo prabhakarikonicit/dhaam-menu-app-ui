@@ -97,12 +97,50 @@ const columns = [
   },
 ];
 
-const ProductsTable = () => {
+const DataTableForMobile = () => {
   return (
-    <div>
-      <DataTable data={data} columns={columns} />
-    </div>
+    <>
+      {data.map((row) => (
+        <div className="bg-white p-3 rounded-lg shadow-sm border my-2">
+          <div className="flex items-start justify-between border-b border-gray-200 pb-3">
+            <div className="flex items-center gap-3 align-unset">
+              <CategoryIcon />
+              <div className="flex flex-col justify-between">
+                <span className="font-medium truncate text-[12px] font-500 leading-tight">
+                  {row.title}
+                </span>
+                <span className="text-cardTitle truncate text-[11px] font-400 leading-tight">
+                  {row.description}
+                </span>
+              </div>
+            </div>
+            <button className="text-gray-500 hover:text-gray-700 float-right">
+              <MoreVertical size={20} />
+            </button>
+          </div>
+          <div>
+            <div className="flex items-center justify-between pt-3">
+              <div className="flex flex-col gap-3">
+                <span className="text-[12px] font-medium leading-tight">
+                  <span className="text-headding-color font-medium text-[12px] leading-[130%]">
+                    Date added:
+                  </span>{" "}
+                  {row.date}
+                </span>
+                <span className="text-[12px] font-medium leading-tight">
+                  <span className="text-headding-color font-medium text-[12px] leading-[130%]">
+                    Price:
+                  </span>{" "}
+                  {row.price}
+                </span>
+              </div>
+              <ToggleSwitch id={`toggle-${row.id}`} onChange={() => {}} />
+            </div>
+          </div>
+        </div>
+      ))}
+    </>
   );
 };
 
-export default ProductsTable;
+export default DataTableForMobile;
