@@ -3,7 +3,7 @@ name: Build and Deploy React App to S3
 on:
   push:
     branches:
-      - dev-prabha  # or your default branch
+      - dev  # or your default branch
 
 jobs:
   build-and-deploy:
